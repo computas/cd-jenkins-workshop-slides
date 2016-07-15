@@ -24,8 +24,86 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section id="cover">
+					<h1>Continuous Delivery Workshop</h1>
+					<h2>Pipeline as Code with Jenkins</h2>
+					<hr/>
+					<h4>Michael Gfeller</h4>
+					<h4><a href="www.computas.com">Computas AS</a> </h4>
+					<h4><a href="www.mgfeller.net">www.mgfeller.net</a></h4>
+				</section>
+				<section id="objectives">
+					<h2>Objectives</h2>
+					<ul>
+						<li>Improved understanding of and knowledge about Continuous Integration, Delivery, and Deployment</li>
+						<li>Describe the pipeline concept</li>
+						<li>Understand CD stack components and roles.</li>
+						<li>Application Architecture requirements for CD (i.e. parallel tests etc).</li>
+					</ul>
+				</section>
+				<section id="requirements">
+					<h2>Requirements</h2>
+					<ul>
+						<li>Bring your own PC</li>
+						<li>Some programming experience</li>
+						<li>Interest in DevOps</li>
+						<li>Active participation</li>
+						<li>Basic linux command line knowledge</li>
+					</ul>
+				</section>
+				<section id="outline">
+					<h2>Outline</h2>
+					<ul>
+						<li>Some theory about Continuous Delivery and friends.</li>
+						<li>Setting up the environment.</li>
+						<li>Implementing a simple pipeline for a given project.</li>
+						<li>Adding new code with test first.</li>
+					</ul>
+				</section>
+				<section id="ci-cd">
+					<h2>Continuous Delivery</h2>
+					<ul>
+						<li class="fragment"><strong>Continuous integration</strong>
+							<div>
+								<label class="fragment">Push/clone,</label>
+								<label class="fragment">Static analysis,</label>
+								<label class="fragment">Pre-deployment testing,</label>
+								<label class="fragment">Packaging/deployment,</label>
+								<label class="fragment">Post-deployment testing</label>
+							</div>
+						</li>
+						<li class="fragment"><strong>Continuous delivery</strong>
+							<div>
+								<label class="fragment">every commit <label class="fragment grow highlight-current-green">can be</label> deployed to production</label>
+							</div>
+						</li>
+						<li class="fragment"><strong>Continuous deployment</strong>
+							<div>
+								<label class="fragment">every commit <label class="fragment grow highlight-current-green">is</label> deployed to production</label>
+							</div>
+						</li>
+					</ul>
+				</section>
+				<section id="environment">
+					<h2>Workshop Environment</h2>
+					<ul>
+						<li>VirtualBox with server environment</li>
+						<li>VirtualBox as Vagrant project, with Puppet</li>
+						<li>Server: Ubuntu server w/o desktop</li>
+						<li>Server Stack: Jenkins, Artifactory, Maven, Java, Git</li>
+						<li>Server tools: Vim</li>
+						<li>Sample Project: Spring Boot Application with Maven</li>
+						<li>Development Environment: locally, IDE, Git client, Java, Maven (another VBox?)</li>
+						<li>Development Environment: as we work with simple code, we can also just use the environment on the vbox, with nano and vim</li>
+					</ul>
+				</section>
+				<section id="resources-acknowledgements">
+					<h2>Resources and Acknowledgements</h2>
+					<ul>
+						<li><a href="http://vfarcic.github.io/ms-workshop/#/cover">Microservices Lifecycle Workshop by Viktor Farcic</a></li>
+					</ul>
+				</section>
+
 			</div>
 		</div>
 
