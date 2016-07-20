@@ -1,129 +1,200 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+    <title>reveal.js</title>
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section id="cover">
-					<h1>Continuous Delivery Workshop</h1>
-					<h2>Pipeline as Code with Jenkins</h2>
-					<hr/>
-					<h4>Michael Gfeller</h4>
-					<h4><a href="www.computas.com">Computas AS</a> </h4>
-					<h4><a href="www.mgfeller.net">www.mgfeller.net</a></h4>
-				</section>
-				<section id="objectives">
-					<h2>Objectives</h2>
-					<ul>
-						<li>Improved understanding of and knowledge about Continuous Integration, Delivery, and Deployment</li>
-						<li>Describe the pipeline concept</li>
-						<li>Understand CD stack components and roles.</li>
-						<li>Application Architecture requirements for CD (i.e. parallel tests etc).</li>
-					</ul>
-				</section>
-				<section id="requirements">
-					<h2>Requirements</h2>
-					<ul>
-						<li>Bring your own PC</li>
-						<li>Some programming experience</li>
-						<li>Interest in DevOps</li>
-						<li>Active participation</li>
-						<li>Basic linux command line knowledge</li>
-					</ul>
-				</section>
-				<section id="outline">
-					<h2>Outline</h2>
-					<ul>
-						<li>Some theory about Continuous Delivery and friends.</li>
-						<li>Setting up the environment.</li>
-						<li>Implementing a simple pipeline for a given project.</li>
-						<li>Adding new code with test first.</li>
-					</ul>
-				</section>
-				<section id="ci-cd">
-					<h2>Continuous Delivery</h2>
-					<ul>
-						<li class="fragment"><strong>Continuous integration</strong>
-							<div>
-								<label class="fragment">Push/clone,</label>
-								<label class="fragment">Static analysis,</label>
-								<label class="fragment">Pre-deployment testing,</label>
-								<label class="fragment">Packaging/deployment,</label>
-								<label class="fragment">Post-deployment testing</label>
-							</div>
-						</li>
-						<li class="fragment"><strong>Continuous delivery</strong>
-							<div>
-								<label class="fragment">every commit <label class="fragment grow highlight-current-green">can be</label> deployed to production</label>
-							</div>
-						</li>
-						<li class="fragment"><strong>Continuous deployment</strong>
-							<div>
-								<label class="fragment">every commit <label class="fragment grow highlight-current-green">is</label> deployed to production</label>
-							</div>
-						</li>
-					</ul>
-				</section>
-				<section id="environment">
-					<h2>Workshop Environment</h2>
-					<ul>
-						<li>VirtualBox with server environment</li>
-						<li>VirtualBox as Vagrant project, with Puppet</li>
-						<li>Server: Ubuntu server w/o desktop</li>
-						<li>Server Stack: Jenkins, Artifactory, Maven, Java, Git</li>
-						<li>Server tools: Vim</li>
-						<li>Sample Project: Spring Boot Application with Maven</li>
-						<li>Development Environment: locally, IDE, Git client, Java, Maven (another VBox?)</li>
-						<li>Development Environment: as we work with simple code, we can also just use the environment on the vbox, with nano and vim</li>
-					</ul>
-				</section>
-				<section id="resources-acknowledgements">
-					<h2>Resources and Acknowledgements</h2>
-					<ul>
-						<li><a href="http://ow.ly/UZIBE">John Willis (Docker Inc.) Presentations</a></li>
-						<li><a href="http://vfarcic.github.io/ms-workshop/#/cover">Microservices Lifecycle Workshop by Viktor Farcic</a></li>
-					</ul>
-				</section>
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section id="cover">
+            <h1>Continuous Delivery Workshop</h1>
+            <h2>Pipeline as Code with Jenkins</h2>
+            <hr/>
+            <h4>Michael Gfeller</h4>
+            <h4><a href="www.computas.com">Computas AS</a></h4>
+            <h4><a href="www.mgfeller.net">www.mgfeller.net</a></h4>
+        </section>
+        <section id="objectives">
+            <h2>Objectives</h2>
+            <ul>
+                <li>Improved understanding of and knowledge about Continuous Integration, Delivery, and Deployment</li>
+                <li>Describe the pipeline concept</li>
+                <li>Understand CD stack components and roles.</li>
+                <li>Application Architecture requirements for CD (i.e. parallel tests etc).</li>
+            </ul>
+        </section>
+        <section id="requirements">
+            <h2>Requirements</h2>
+            <ul>
+                <li>Bring your own PC</li>
+                <li>Some programming experience</li>
+                <li>Interest in DevOps</li>
+                <li>Active participation</li>
+                <li>Basic linux command line knowledge</li>
+            </ul>
+        </section>
+        <section id="outline">
+            <h2>Outline</h2>
+            <ul>
+                <li>Some theory about Continuous Delivery and friends.</li>
+                <li>Setting up the environment.</li>
+                <li>Implementing a simple pipeline for a given project.</li>
+                <li>Adding new code with test first.</li>
+            </ul>
+        </section>
+        <section id="ci-cd">
+            <section>
+                <h2>Continuous Delivery</h2>
+                <img alt="Continuous Delivery. Reliable Software Releases Through Build, Test, and Deployment Automation"
+                     src="cd-humble-farley-379x500.jpg" width="379" height="500"/>
+            </section>
+            <section>
+                <h2>Continuous ...</h2>
+                <ul>
+                    <li class="fragment"><strong>Integration</strong>
+                        <div>
+                            <label class="fragment">Every commit is built, tested, packaged and deployed to
+                                test.</label>
+                        </div>
+                    </li>
+                    <li class="fragment"><strong>Delivery</strong>
+                        <div>
+                            <label class="fragment">Every commit <label class="fragment grow highlight-current-green">can
+                                be</label> deployed to production.</label>
+                        </div>
+                    </li>
+                    <li class="fragment"><strong>Deployment</strong>
+                        <div>
+                            <label class="fragment">Every commit <label
+                                    class="fragment grow highlight-current-green">is</label> deployed to
+                                production.</label>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <img alt="Release It! Design and Deploy Production-Ready Software" src="release-it-417x500.jpg"
+                     width="417" height="500"/>
+                <aside class="notes">
+                    <ul>Design and architecture need to support CD.</ul>
+                </aside>
+            </section>
+        </section>
+        <section id="environment">
+            <section>
+                <h2>Workshop Environment</h2>
+                <ul>
+                    <li>VirtualBox with server environment</li>
+                    <li>VirtualBox as Vagrant project, with Puppet</li>
+                    <li>Server: Ubuntu server w/o desktop</li>
+                    <li>Server Stack: Jenkins, Artifactory, Maven, Java, Git</li>
+                    <li>Server tools: Vim</li>
+                    <li>Sample Project: Spring Boot Application with Maven</li>
+                    <li>Development Environment: locally, IDE, Git client, Java, Maven (another VBox?)</li>
+                    <li>Development Environment: as we work with simple code, we can also just use the environment on
+                        the vbox, with nano and vim
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <h2>Get Started!</h2>
+                <p>These slides use <a href="http://lab.hakim.se/reveal-js/#/">reveal.js</a></p>
+                <p>Clone them from <a href="https://github.com/mgfeller/cd-jenkins-workshop-slides">https://github.com/mgfeller/cd-jenkins-workshop-slides</a>.
+                </p>
+                <p>Setup the server environment: follow the instructions (do not configure Jenkins and Artifactory yet)
+                    in the readme on <a
+                            href="https://github.com/mgfeller/cd-jenkins-workshop">https://github.com/mgfeller/cd-jenkins-workshop</a>.
+                </p>
+            </section>
+            <section>
+                <h2>Configure Jenkins</h2>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h1>Pipeline</h1>
+            </section>
+            <section><h2>What is a pipeline?</h2></section>
+            <section><h2>The pipeline we're going to build.</h2>
+                <ul>
+                    <li>Clone</li>
+                    <li>Compile</li>
+                    <li>Feedback</li>
+                    <li>License</li>
+                    <li>Test</li>
+                    <li>Manual</li>
+                    <li>Deploy</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Principles: build each artifact only once!</li>
+                        <li>Versioning (semantic versioning). Every commit a version.</li>
+                        <li>How to use credentials.</li>
+                        <li>Manual steps.</li>
+                    </ul>
+                </aside>
+            </section>
+            <section><h2>Checkout and compile</h2></section>
+        </section>
+        <section>
+            <section>
+                <h2>Suggestion for further work</h2>
+                <ul>
+                    <li>Multi branch builds</li>
+                    <li>Jenkinsfile</li>
+                </ul>
+            </section>
+        </section>
+        <section id="resources-acknowledgements">
+            <h2>Resources and Acknowledgements</h2>
+            <ul>
+                <li><a href="http://ow.ly/UZIBE">John Willis (Docker Inc.) Presentations</a></li>
+                <li><a href="http://vfarcic.github.io/ms-workshop/#/cover">Microservices Lifecycle Workshop by Viktor
+                    Farcic</a></li>
+            </ul>
+        </section>
 
-			</div>
-		</div>
+    </div>
+</div>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
 
-		<script>
-			// More info https://github.com/hakimel/reveal.js#configuration
-			Reveal.initialize({
-				history: true,
+<script>
+    // More info https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        history: true,
 
-				// More info https://github.com/hakimel/reveal.js#dependencies
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
-	</body>
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {
+                src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+            }
+        ]
+    });
+</script>
+</body>
 </html>
