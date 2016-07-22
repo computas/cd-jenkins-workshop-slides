@@ -112,14 +112,18 @@
                     <li>VirtualBox with server environment</li>
                     <li>VirtualBox as Vagrant project, with Puppet</li>
                     <li>Server: Ubuntu server w/o desktop</li>
-                    <li>Server Stack: Jenkins, Artifactory, Maven, Java, Git</li>
-                    <li>Server tools: Vim</li>
-                    <li>Sample Project: Spring Boot Application with Maven</li>
-                    <li>Development Environment: locally, IDE, Git client, Java, Maven (another VBox?)</li>
-                    <li>Development Environment: as we work with simple code, we can also just use the environment on
-                        the vbox, with nano and vim
-                    </li>
+                    <li>Server stack: Jenkins, Artifactory, Maven, Java, Git</li>
+                    <li>Server tools: Vim (spf13-vim), ftp client</li>
+                    <li>Sample project: Spring Boot application with Maven</li>
+                    <li>Development environment locally: IDE, Git client, Java 8, Maven</li>
                 </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Development Environment: as we work with simple code, we can also just use the environment
+                            on the vbox, with nano and vim.
+                        </li>
+                    </ul>
+                </aside>
             </section>
             <section>
                 <h2>Get Started!</h2>
@@ -128,8 +132,7 @@
                 </p>
                 <p>Setup the server environment: follow the instructions (do not configure Jenkins and Artifactory yet)
                     in the <a href="https://github.com/mgfeller/cd-jenkins-workshop/blob/master/README.md">readme</a> on
-                    <a
-                            href="https://github.com/mgfeller/cd-jenkins-workshop">https://github.com/mgfeller/cd-jenkins-workshop</a>.
+                    <a href="https://github.com/mgfeller/cd-jenkins-workshop">https://github.com/mgfeller/cd-jenkins-workshop</a>.
                 </p>
                 <aside class="notes">
                     <ul>
@@ -195,6 +198,31 @@
                     <li>Verify in ssh-shell by running <em>mail</em>.</li>
                 </ul>
             </section>
+            <section>
+                <h2>Jenkins Global Tool Java</h2>
+                <ul>
+                    <li><a href="http://192.168.33.10:8080/configureTools/">Jenkins > Manage Jenkins > Global Tool
+                        Configuration</a></li>
+                    <li>Go to 'JDK'</li>
+                    <li>Add JDK installation</li>
+                    <li>Name: jdk8</li>
+                    <li>JAVA_HOME: /usr/lib/jvm/java-8-oracle/</li>
+                </ul>
+                <aside class="notes">
+                    We're going to build a java and maven project.
+                </aside>
+            </section>
+            <section>
+                <h2>Jenkins Global Tool Maven</h2>
+                <ul>
+                    <li><a href="http://192.168.33.10:8080/configureTools/">Jenkins > Manage Jenkins > Global Tool
+                        Configuration</a></li>
+                    <li>Go to 'Maven'</li>
+                    <li>Add Maven installation</li>
+                    <li>Name: M3</li>
+                    <li>MAVEN_HOME: /usr/share/maven/maven-3.3.9/</li>
+                </ul>
+            </section>
         </section>
         <section>
             <section>
@@ -225,7 +253,40 @@
                     </ul>
                 </aside>
             </section>
-            <section><h2>Checkout and compile</h2></section>
+        </section>
+        <section>
+            <section>
+                <h2>First Pipeline</h2>
+                <ul>
+                    <li><a href="http://192.168.33.10:8080/view/All/newJob">Jenkins > New Item</a></li>
+                    <li>Item name: workshop</li>
+                    <li>Select 'Pipeline' as project type.</li>
+                    <li>Click 'OK'</li>
+                    <li>Go to 'Pipeline' section in the configuration page.</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Pipeline Script</h2>
+                <pre>
+                    <code class="groovy">
+node {
+   stage 'Checkout'
+
+   git url: 'https://github.com/mgfeller/sample-spring-app.git'
+
+   def mvnHome = tool 'M3'
+
+   stage 'Build'
+
+   sh "${mvnHome}/bin/mvn -DskipTests clean package"
+}
+                    </code>
+                </pre>
+                <p style="text-align: center">Click 'Save', then 'Build now'.</p>
+            </section>
+            <section>
+                <img src="pipeline-first-build.jpg">
+            </section>
         </section>
         <section>
             <section>
