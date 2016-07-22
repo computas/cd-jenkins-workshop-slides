@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>reveal.js</title>
+    <title>CD Jenkins Workshop</title>
 
     <link rel="stylesheet" href="css/reveal.css">
     <link rel="stylesheet" href="css/theme/black.css">
@@ -20,6 +20,13 @@
         link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
         document.getElementsByTagName('head')[0].appendChild(link);
     </script>
+
+    <style type="text/css">
+        p {
+            text-align: left;
+        }
+    </style>
+
 </head>
 <body>
 <div class="reveal">
@@ -120,28 +127,94 @@
                 <p>Clone them from <a href="https://github.com/mgfeller/cd-jenkins-workshop-slides">https://github.com/mgfeller/cd-jenkins-workshop-slides</a>.
                 </p>
                 <p>Setup the server environment: follow the instructions (do not configure Jenkins and Artifactory yet)
-                    in the readme on <a
+                    in the <a href="https://github.com/mgfeller/cd-jenkins-workshop/blob/master/README.md">readme</a> on
+                    <a
                             href="https://github.com/mgfeller/cd-jenkins-workshop">https://github.com/mgfeller/cd-jenkins-workshop</a>.
                 </p>
+                <aside class="notes">
+                    <ul>
+                        <li>vagrant reload --provision</li>
+                        <li>VirtualBox Guest Additions commented out by default</li>
+                    </ul>
+                </aside>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h1>Setup Jenkins</h1>
             </section>
             <section>
-                <h2>Configure Jenkins</h2>
+                <h2>Unlock Jenkins</h2>
+                <ul>
+                    <li>In browser, open <a href="http://192.168.33.10:8080/">http://192.168.33.10:8080/</a>
+                    </li>
+                    <li>On command line, open ssh-shell:<br/>
+                        <em>ssh vagrant@192.168.33.10</em>, password:
+                        <em>vagrant</em><br/> (or run
+                        <em>vagrant ssh</em> in the project folder)
+                    </li>
+                    <li>Run <em>sudo cat /var/lib/jenkins/secrets/initialAdminPassword</em> and copy this
+                        administrator password into the field in the browser
+                    </li>
+                </ul>
+                <img src="unlock-jenkins-194x200.jpg" alt="Unlock Jenkins" width="194" height="200">
+            </section>
+            <section>
+                <h2>Suggested Plugins</h2>
+                <img alt="Install Suggested Jenkins Plugins" src="customize-jenkins-install-plugins-493x400.jpg"
+                     height="400" width="493"/>
+            </section>
+            <section>
+                <h2>First Admin User</h2>
+                <ul>
+                    <li>Username: admin</li>
+                    <li>Password: 1234!abcd</li>
+                    <li>Full name: Admin</li>
+                    <li>E-mail address: vagrant@localhost</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Jenkins Location</h2>
+                <ul>
+                    <li><a href="http://192.168.33.10:8080/configure">Jenkins > Manage Jenkins > Configure System</a>
+                    </li>
+                    <li>Go to 'Jenkins Location'</li>
+                    <li>Jenkins URL: http://192.168.33.10:8080/</li>
+                    <li>System Admin e-mail address: vagrant@localhost</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Jenkins E-mail Notification</h2>
+                <ul>
+                    <li><a href="http://192.168.33.10:8080/configure">Jenkins > Manage Jenkins > Configure System</a>
+                    </li>
+                    <li>Go to 'E-mail Notification'</li>
+                    <li>SMTP server: localhost</li>
+                    <li>Default user e-mail suffix: @localhost</li>
+                    <li>Send test e-mail to: vagrant@localhost</li>
+                    <li>Verify in ssh-shell by running <em>mail</em>.</li>
+                </ul>
             </section>
         </section>
         <section>
             <section>
                 <h1>Pipeline</h1>
             </section>
-            <section><h2>What is a pipeline?</h2></section>
-            <section><h2>The pipeline we're going to build.</h2>
+            <section>
+                <h2>What is a pipeline?</h2>
+            </section>
+            <section>
+                <h2>Pipeline Elements</h2>
                 <ul>
-                    <li>Clone</li>
-                    <li>Compile</li>
-                    <li>Feedback</li>
-                    <li>License</li>
-                    <li>Test</li>
-                    <li>Manual</li>
-                    <li>Deploy</li>
+                    <li>Clone git repository</li>
+                    <li>Compile code</li>
+                    <li>Feedback to user</li>
+                    <li>Add License to code</li>
+                    <li>Run tests</li>
+                    <li>Version code</li>
+                    <li>Create and push git tag</li>
+                    <li>Manual steps (approval)</li>
+                    <li>Deploy to a artifact repo</li>
                 </ul>
                 <aside class="notes">
                     <ul>
