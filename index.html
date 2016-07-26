@@ -48,8 +48,8 @@
                 <li>Application Architecture requirements for CD (i.e. parallel tests etc).</li>
             </ul>
         </section>
-        <section id="requirements">
-            <h2>Requirements</h2>
+        <section id="prerequisites">
+            <h2>Prerequisites</h2>
             <ul>
                 <li>Bring your own PC</li>
                 <li>Some programming experience</li>
@@ -65,6 +65,7 @@
                 <li>Setting up the environment.</li>
                 <li>Implementing a simple pipeline for a given project.</li>
                 <li>Adding new code with test first.</li>
+                <li>Theory and practice</li>
             </ul>
         </section>
         <section id="ci-cd">
@@ -230,22 +231,25 @@
             </section>
             <section>
                 <h2>What is a pipeline?</h2>
-            </section>
-            <section>
-                <h2>Pipeline Elements</h2>
-                <ul>
-                    <li>Clone git repository</li>
-                    <li>Compile code</li>
-                    <li>Feedback to user</li>
-                    <li>Add License to code</li>
-                    <li>Run tests</li>
-                    <li>Version code</li>
-                    <li>Create and push git tag</li>
-                    <li>Manual steps (approval)</li>
-                    <li>Deploy to a artifact repo</li>
-                </ul>
+                <img alt="A pipeline" src="pipeline.jpg" width="707" height="500"/>
                 <aside class="notes">
                     <ul>
+                        <li>Coined by Humble & Farley</li>
+                        <li>What flows through a pipeline?</li>
+                        <li>We'll implement part of this (show slide where parts are marked)</li>
+                        <li>
+                            <ul>
+                                <li>Clone git repository (not shown in here)</li>
+                                <li>Compile code</li>
+                                <li>Feedback to user</li>
+                                <li>Add License to code</li>
+                                <li>Run tests</li>
+                                <li>Version code (not shown here)</li>
+                                <li>Create and push git tag (not shown here)</li>
+                                <li>Manual steps (approval)</li>
+                                <li>Deploy to a artifact repo</li>
+                            </ul>
+                        </li>
                         <li>Principles: build each artifact only once!</li>
                         <li>Versioning (semantic versioning). Every commit a version.</li>
                         <li>How to use credentials.</li>
