@@ -282,7 +282,7 @@ node {
 
    stage 'Build'
 
-   sh "${mvnHome}/bin/mvn -DskipTests clean package"
+   sh "${mvnHome}/bin/mvn clean package -DskipTests"
 }
                     </code>
                 </pre>
@@ -290,6 +290,79 @@ node {
             </section>
             <section>
                 <img src="pipeline-first-build.jpg">
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Testing and Feedback</h2>
+                <pre>
+                    <code class="groovy">
+   stage 'Unit Test'
+
+   sh "${mvnHome}/bin/mvn test -DpipelineFailOneTest=true"
+
+   stage 'Deploy'
+
+   echo "Deployed!"
+                    </code>
+                </pre>
+                <p style="text-align: center">Click 'Save', then 'Build now'.</p>
+                <aside class="notes">
+                    <ul>
+                        <li>-DpipelineFailOneTest=true forces one test to fail</li>
+                        <li>we add e-mail notification in a minute</li>
+                    </ul>
+                </aside>
+            </section>
+            <section>
+                <h2>Archiving Test Results</h2>
+                <pre>
+                    <code class="groovy">
+   stage 'Unit Test'
+   try {
+       sh "${mvnHome}/bin/mvn -B test -DpipelineFailOneTest=true"
+   } catch (err) {
+       step([$class: 'JUnitResultArchiver',
+            testResults: '**/target/surefire-reports/TEST-*.xml'])
+       throw err
+   }
+                    </code>
+                </pre>
+                <p style="text-align: center">Click 'Save', then 'Build now'.</p>
+                <aside class="notes">
+                    <li>
+                        <a href="https://support.cloudbees.com/hc/en-us/articles/218866667-How-to-abort-a-Pipeline-build-if-JUnit-tests-fail">How
+                            to abort a Pipeline build if JUnit tests fail</a></li>
+                    <li>Test results are now available in the build page.</li>
+                </aside>
+            </section>
+            <section>
+                <h2>Send E-Mail Notification</h2>
+                <pre>
+                    <code class="groovy">
+        step([$class: 'JUnitResultArchiver',
+            testResults: '**/target/surefire-reports/TEST-*.xml'])
+        mail subject: 'Build Failed - Failed Unit Tests.',
+            body: 'The workshop build failed!',
+            charset: 'utf-8',
+            from: 'vagrant@localhost',
+            mimeType: 'text/plain',
+            to: 'vagrant@localhost'
+        throw err
+                    </code>
+                </pre>
+                <p style="text-align: center">Build, then ssh to the vagrant box and check your mail!</p>
+            </section>
+            <section>
+                <h2>Get Last Author to E-Mail</h2>
+                <pre>
+                    <code class="groovy">
+    sh "git --no-pager show -s --format='%an <%ae>' > lastAuthor.txt"
+    lastAuthor = readFile('lastAuthor.txt').trim()
+    echo "Last author: ${lastAuthor}"
+                    </code>
+                </pre>
+                <p style="text-align: center">E-Mail server not set up to handle external email addresses.</p>
             </section>
         </section>
         <section>
