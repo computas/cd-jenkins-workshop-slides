@@ -366,6 +366,53 @@ node {
             </section>
         </section>
         <section>
+            <h2>Review</h2>
+            <ul>
+                <li>node</li>
+                <li>stage</li>
+                <li>step</li>
+            </ul>
+        </section>
+        <section>
+            <section>
+                <h1>Delivery</h1>
+                <h1>Deployment</h1>
+            </section>
+            <section>
+                <h2>Configure Artifactory Access</h2>
+                <p style="text-align: center">login with: admin/password</p>
+                <img src="artifactory-permission-deploy-1.jpg" width="1065" height="449"/>
+            </section>
+            <section>
+                <h2>Configure Artifactory Access</h2>
+                <img src="artifactory-permission-deploy-2.jpg" width="914" height="229"/>
+            </section>
+            <section>
+                <h2>Pipeline</h2>
+                <pre>
+                    <code class="groovy">
+    // adjust this line, set  -DpipelineFailOneTest=false
+    sh "${mvnHome}/bin/mvn -B test -DpipelineFailOneTest=false"
+                    </code>
+                </pre>
+                <pre>
+                    <code class="groovy">
+   stage 'Deploy'
+   sh "${mvnHome}/bin/mvn deploy"
+                    </code>
+                </pre>
+            </section>
+            <section>
+                <h2>Deployed!</h2>
+                <img src="artifactory-deployed.jpg" height="493" width="724"/>
+                <aside class="notes">
+                    <ul>
+                        <li>But: snapshot? This is not a release, and cannot be delivered / deployed!</li>
+                    </ul>
+                </aside>
+            </section>
+        </section>
+        <section>
             <section>
                 <h2>Suggestion for further work</h2>
                 <ul>
