@@ -354,7 +354,7 @@ node {
                 <p style="text-align: center">Build, then ssh to the vagrant box and check your mail!</p>
             </section>
             <section>
-                <h2>Get Last Author to E-Mail</h2>
+                <h2>Get Last Author E-Mail</h2>
                 <pre>
                     <code class="groovy">
     sh "git --no-pager show -s --format='%an <%ae>' > lastAuthor.txt"
@@ -412,6 +412,52 @@ node {
                 </aside>
             </section>
         </section>
+        <section>
+            <section>
+                <h2>Versioning</h2>
+                <ul>
+                    <li>Each (potential) release must have a version.</li>
+                    <li>Which versioning scheme should be used?</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Challenge: compatibility between services.</li>
+                    </ul>
+                </aside>
+            </section>
+            <section>
+                <h2>Semantic Versioning</h2>
+            </section>
+            <section>
+                <h2>Parametrize Build</h2>
+                <img src="versioning-jenkins-build-parametrize.jpg" width="919" height="269"/>
+            </section>
+            <section>
+                <h2>Set Version in 'build' Stage</h2>
+                <pre>
+                    <code class="groovy">
+   stage 'Build'
+   def version = "${BASE_VERSION}-" +
+        currentBuild.number.toString().padLeft(4,'0')
+   sh "${mvnHome}/bin/mvn versions:set -DnewVersion=${version}"
+   sh "${mvnHome}/bin/mvn clean package -DskipTests"
+                    </code>
+                </pre>
+                <p style="text-align: center">Uncheck 'Use Groovy Sandbox' in pipeline configuration.</p>
+                <p style="text-align: center">Click 'Save', then 'Build with Parameters'.</p>
+            </section>
+            <section>
+                <h2>Deployed!</h2>
+                <img src="versioning-artifactory-deployed.jpg" width="585" height="426"/>
+                <aside class="notes">
+                    <ul>
+                        <li>repo's are configured in pom file</li>
+                        <li>this is not how it should be done, it should be in an external settings file.</li>
+                    </ul>
+                </aside>
+            </section>
+        </section>
+
         <section>
             <section>
                 <h2>Suggestion for further work</h2>
