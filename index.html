@@ -457,7 +457,73 @@ node {
                 </aside>
             </section>
         </section>
-
+        <section>
+            <section>
+                <h2>Tag in VCS</h2>
+                <ul>
+                    <li>Each (approved) release should have a tag in VCS.</li>
+                    <li>Tagging (and versioning) should not change the commit history.</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Configure ssh keys for Jenkins</h2>
+                <ul>
+                    <li>vagrant ssh</li>
+                    <li>ssh-keygen (without passphrase)</li>
+                    <li>sudo cp -r ~/.ssh /var/lib/jenkins</li>
+                    <li>sudo chown -R jenkins:jenkins /var/lib/jenkins/.ssh</li>
+                    <li>Add the public key to your github account.</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Adjust 'checkout' stage</h2>
+                <pre>
+                    <code class="groovy">
+   stage 'Checkout'
+   git url: 'git@github.com:mgfeller/sample-spring-app.git'
+                    </code>
+                </pre>
+            </section>
+            <section>
+                <h2>Add Stage 'tag'</h2>
+                <pre>
+                    <code class="groovy">
+    stage 'Tag'
+    sh "git config user.name \"Vagrant Builder\""
+    sh "git config user.email vagrant@localhost"
+    def comment = "\"Automatically created tag ${version}\""
+    sh "git tag -a -m ${comment} ${version}"
+    sh "git push origin ${version}"
+                    </code>
+                </pre>
+                <p style="text-align: center">Click 'Save', then 'Build with Parameters'.</p>
+            </section>
+            <section>
+                <h2>Tagged!</h2>
+                <img src="tagged-github.jpg" width="890" height="377"/>
+            </section>
+<!--
+            <section>
+                <h2>Configure Credentials in Jenkins</h2>
+                <ul>
+                    <li>Using ssh keys.</li>
+                    <li>Upload public key to github.</li>
+                    <li>Add a 'SSH Username with private key' to 'Global credentials (unrestricted)'</li>
+                    <li>Use your private key.</li>
+                    <li>Copy the credential's ID for usage in the 'Checkout' stage.</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Adjust 'checkout' stage</h2>
+                <pre>
+                    <code class="groovy">
+   stage 'Checkout'
+   git url: 'git@github.com:mgfeller/sample-spring-app.git', credentialsId: '0eb4ae1a-cfee-4018-9521-d6237ad5ef5c'
+                    </code>
+                </pre>
+            </section>
+-->
+        </section>
         <section>
             <section>
                 <h2>Suggestion for further work</h2>
