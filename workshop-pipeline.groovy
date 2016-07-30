@@ -1,6 +1,6 @@
 node {
     stage 'Checkout'
-    git url: 'https://github.com/mgfeller/sample-spring-app.git'
+    git url: 'git@github.com:mgfeller/sample-spring-app.git'
 
     def mvnHome = tool 'M3'
 
@@ -12,7 +12,6 @@ node {
 
     stage 'Unit Test'
 
-// getting last author to alert:
     sh "git --no-pager show -s --format='%an <%ae>' > lastAuthor.txt"
     lastAuthor = readFile('lastAuthor.txt').trim()
     echo "Last author: ${lastAuthor}"
@@ -32,6 +31,16 @@ node {
     }
 
     stage 'Deploy'
+    timeout(time: 40, unit: 'SECONDS') {
+        input message: 'Do you want to release version, ' +  version + '?', ok: 'Release'
+    }
+
+    sh "git config user.name \"Vagrant Builder\""
+    sh "git config user.email vagrant@localhost"
+    def comment = "\"Automatically created tag ${version}\""
+    sh "git tag -a -m ${comment} ${version}"
+    sh "git push origin ${version}"
+
     sh "${mvnHome}/bin/mvn deploy"
 
 }

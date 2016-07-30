@@ -532,6 +532,37 @@ node {
         </section>
         <section>
             <section>
+                <h2>Manual Steps and Approval</h2>
+                <ul>
+                    <li>UAT</li>
+                    <li>Exploratory testing</li>
+                    <li>Approval for delivery or deployment</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Change 'deploy'-stage.</h2>
+                <pre>
+                    <code class="groovy">
+    stage 'Deploy'
+    timeout(time: 20, unit: 'SECONDS') {
+        input message: 'Do you want to deploy version, ' +
+                        version + '?', ok: 'Deploy'
+    }
+
+    sh "git config user.name \"Vagrant Builder\""
+    sh "git config user.email vagrant@localhost"
+    def comment = "\"Automatically created tag ${version}\""
+    sh "git tag -a -m ${comment} ${version}"
+    sh "git push origin ${version}"
+
+    sh "${mvnHome}/bin/mvn deploy"
+                    </code>
+                </pre>
+                <p>Move tagging to this stage as well. Save and build. Hover over deploy-stage when it pauses.</p>
+            </section>
+        </section>
+        <section>
+            <section>
                 <h2>Suggestion for further work</h2>
                 <ul>
                     <li>Multi branch builds</li>
