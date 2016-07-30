@@ -540,7 +540,7 @@ node {
                 </ul>
             </section>
             <section>
-                <h2>Change 'deploy'-stage.</h2>
+                <h2>Change 'deploy'-stage</h2>
                 <pre>
                     <code class="groovy">
     stage 'Deploy'
@@ -559,6 +559,40 @@ node {
                     </code>
                 </pre>
                 <p>Move tagging to this stage as well. Save and build. Hover over deploy-stage when it pauses.</p>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Parallelism</h2>
+                <pre>
+                    <code>
+   parallel (
+     "stream 1" : { ... steps ...  },
+     "stream 2" : { ... steps in parallel ... }
+   )
+                    </code>
+                </pre>
+                <p style="text-align: center">If one stream fails, the whole parellel block fails.</p>
+            </section>
+            <section>
+                <h2>Add license check to unit test stage</h2>
+                <pre>
+                    <code>
+parallel(
+   'licenseCheck': { sh "${mvnHome}/bin/mvn license:check" },
+   'unitTest': {
+       try {
+            sh "${mvnHome}/bin/mvn -B test -DpipelineFailOneTest=false"
+       } catch (err) {
+            step([$class: 'JUnitResultArchiver',
+                testResults: '**/target/surefire-reports/TEST-*.xml'])
+            // mailing code here
+            throw err
+       }
+   }
+)
+                    </code>
+                </pre>
             </section>
         </section>
         <section>

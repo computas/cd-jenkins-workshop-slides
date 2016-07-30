@@ -10,25 +10,30 @@ node {
     sh "${mvnHome}/bin/mvn versions:set -DnewVersion=${version}"
     sh "${mvnHome}/bin/mvn clean package -DskipTests"
 
-    stage 'Unit Test'
+    stage 'Unit Test / License Check'
 
     sh "git --no-pager show -s --format='%an <%ae>' > lastAuthor.txt"
     lastAuthor = readFile('lastAuthor.txt').trim()
     echo "Last author: ${lastAuthor}"
 
-    try {
-        sh "${mvnHome}/bin/mvn -B test -DpipelineFailOneTest=false"
-    } catch (err) {
-        step([$class: 'JUnitResultArchiver',
-              testResults: '**/target/surefire-reports/TEST-*.xml'])
-        mail subject: 'Build Failed - Failed Unit Tests.',
-                body: 'The workshop build failed!',
-                charset: 'utf-8',
-                from: 'vagrant@localhost',
-                mimeType: 'text/plain',
-                to: 'vagrant@localhost'
-        throw err
-    }
+    parallel(
+            'licenseCheck': { sh "${mvnHome}/bin/mvn license:check" },
+            'unitTest': {
+                try {
+                    sh "${mvnHome}/bin/mvn -B test -DpipelineFailOneTest=false"
+                } catch (err) {
+                    step([$class: 'JUnitResultArchiver',
+                          testResults: '**/target/surefire-reports/TEST-*.xml'])
+                    mail subject: 'Build Failed - Failed Unit Tests.',
+                            body: 'The workshop build failed!',
+                            charset: 'utf-8',
+                            from: 'vagrant@localhost',
+                            mimeType: 'text/plain',
+                            to: 'vagrant@localhost'
+                    throw err
+                }
+            }
+    )
 
     stage 'Deploy'
     timeout(time: 40, unit: 'SECONDS') {
