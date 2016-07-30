@@ -25,6 +25,12 @@
         p {
             text-align: left;
         }
+
+        span.inlinecode {
+            font-family: "Courier New", monospace;
+            color: #336699;
+            /*background-color: #111111;*/
+        }
     </style>
 
 </head>
@@ -153,11 +159,11 @@
                     <li>In browser, open <a href="http://192.168.33.10:8080/">http://192.168.33.10:8080/</a>
                     </li>
                     <li>On command line, open ssh-shell:<br/>
-                        <em>ssh vagrant@192.168.33.10</em>, password:
+                        <span class="inlinecode">ssh vagrant@192.168.33.10</span>, password:
                         <em>vagrant</em><br/> (or run
-                        <em>vagrant ssh</em> in the project folder)
+                        <span class="inlinecode">vagrant ssh</span> in the project folder)
                     </li>
-                    <li>Run <em>sudo cat /var/lib/jenkins/secrets/initialAdminPassword</em> and copy this
+                    <li>Run <span class="inlinecode">sudo cat /var/lib/jenkins/secrets/initialAdminPassword</span> and copy this
                         administrator password into the field in the browser
                     </li>
                 </ul>
@@ -196,7 +202,7 @@
                     <li>SMTP server: localhost</li>
                     <li>Default user e-mail suffix: @localhost</li>
                     <li>Send test e-mail to: vagrant@localhost</li>
-                    <li>Verify in ssh-shell by running <em>mail</em>.</li>
+                    <li>Verify in ssh-shell by running <span class="inlinecode">mail</span>.</li>
                 </ul>
             </section>
             <section>
@@ -351,7 +357,7 @@ node {
         throw err
                     </code>
                 </pre>
-                <p style="text-align: center">Build, then ssh to the vagrant box and check your mail!</p>
+                <p style="text-align: center">Build, execute <span class="inlinecode">vagrant ssh</span> and check your <span class="inlinecode">mail</span>!</p>
             </section>
             <section>
                 <h2>Get Last Author E-Mail</h2>
@@ -468,11 +474,11 @@ node {
             <section>
                 <h2>Configure ssh keys for Jenkins</h2>
                 <ul>
-                    <li>vagrant ssh</li>
-                    <li>ssh-keygen (without passphrase)</li>
-                    <li>sudo cp -r ~/.ssh /var/lib/jenkins</li>
-                    <li>sudo chown -R jenkins:jenkins /var/lib/jenkins/.ssh</li>
-                    <li>Add the public key to your github account.</li>
+                    <li><span class="inlinecode">vagrant ssh</span></li>
+                    <li><span class="inlinecode">ssh-keygen</span><br/>(without passphrase)</li>
+                    <li><span class="inlinecode">sudo cp -r ~/.ssh /var/lib/jenkins</span></li>
+                    <li><span class="inlinecode">sudo chown -R jenkins:jenkins /var/lib/jenkins/.ssh</span></li>
+                    <li>Add the public key (id_rsa.pub) to your github account.</li>
                 </ul>
             </section>
             <section>
