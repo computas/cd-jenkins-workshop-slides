@@ -163,7 +163,8 @@
                         <em>vagrant</em><br/> (or run
                         <span class="inlinecode">vagrant ssh</span> in the project folder)
                     </li>
-                    <li>Run <span class="inlinecode">sudo cat /var/lib/jenkins/secrets/initialAdminPassword</span> and copy this
+                    <li>Run <span class="inlinecode">sudo cat /var/lib/jenkins/secrets/initialAdminPassword</span> and
+                        copy this
                         administrator password into the field in the browser
                     </li>
                 </ul>
@@ -357,7 +358,8 @@ node {
         throw err
                     </code>
                 </pre>
-                <p style="text-align: center">Build, execute <span class="inlinecode">vagrant ssh</span> and check your <span class="inlinecode">mail</span>!</p>
+                <p style="text-align: center">Build, execute <span class="inlinecode">vagrant ssh</span> and check your
+                    <span class="inlinecode">mail</span>!</p>
             </section>
             <section>
                 <h2>Get Last Author E-Mail</h2>
@@ -508,27 +510,27 @@ node {
                 <h2>Tagged!</h2>
                 <img src="tagged-github.jpg" width="890" height="377"/>
             </section>
-<!--
-            <section>
-                <h2>Configure Credentials in Jenkins</h2>
-                <ul>
-                    <li>Using ssh keys.</li>
-                    <li>Upload public key to github.</li>
-                    <li>Add a 'SSH Username with private key' to 'Global credentials (unrestricted)'</li>
-                    <li>Use your private key.</li>
-                    <li>Copy the credential's ID for usage in the 'Checkout' stage.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Adjust 'checkout' stage</h2>
-                <pre>
-                    <code class="groovy">
-   stage 'Checkout'
-   git url: 'git@github.com:mgfeller/sample-spring-app.git', credentialsId: '0eb4ae1a-cfee-4018-9521-d6237ad5ef5c'
-                    </code>
-                </pre>
-            </section>
--->
+            <!--
+                        <section>
+                            <h2>Configure Credentials in Jenkins</h2>
+                            <ul>
+                                <li>Using ssh keys.</li>
+                                <li>Upload public key to github.</li>
+                                <li>Add a 'SSH Username with private key' to 'Global credentials (unrestricted)'</li>
+                                <li>Use your private key.</li>
+                                <li>Copy the credential's ID for usage in the 'Checkout' stage.</li>
+                            </ul>
+                        </section>
+                        <section>
+                            <h2>Adjust 'checkout' stage</h2>
+                            <pre>
+                                <code class="groovy">
+               stage 'Checkout'
+               git url: 'git@github.com:mgfeller/sample-spring-app.git', credentialsId: '0eb4ae1a-cfee-4018-9521-d6237ad5ef5c'
+                                </code>
+                            </pre>
+                        </section>
+            -->
         </section>
         <section>
             <section>
@@ -626,6 +628,26 @@ parallel(
                     <li>Hint: use @FixMethodOrder.</li>
                 </ul>
             </section>
+            <section>
+                <h2>Return Document as HTML</h2>
+                <ul>
+                    <li>Document returned as HTML when the URL is <em>/documents/{id}.html</em>.</li>
+                    <li>Add a new method to the test class.</li>
+                    <li>Assert that the returned content type is compatible to <em>text/html</em></li>
+                    <li>Fix the failing test.</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h1>Concurrency</h1>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Summary</h2>
+                <img src="pipeline.jpg" width="707" height="500"/>
+            </section>
         </section>
         <section>
             <section>
@@ -633,6 +655,7 @@ parallel(
                 <ul>
                     <li>Multi branch builds</li>
                     <li>Jenkinsfile</li>
+                    <li>Scale Jenkins infrastructure</li>
                 </ul>
             </section>
         </section>
