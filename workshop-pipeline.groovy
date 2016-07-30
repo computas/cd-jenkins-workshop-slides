@@ -35,6 +35,16 @@ node {
             }
     )
 
+    stage "IT"
+    try {
+        sh "${mvnHome}/bin/mvn -B test -Pit"
+    } catch (err) {
+        step([$class: 'JUnitResultArchiver',
+              testResults: '**/target/surefire-reports/TEST-*.xml'])
+        // mailing code here
+        throw err
+    }
+
     stage 'Deploy'
     timeout(time: 40, unit: 'SECONDS') {
         input message: 'Do you want to release version, ' +  version + '?', ok: 'Release'

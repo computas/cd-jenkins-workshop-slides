@@ -565,7 +565,7 @@ node {
             <section>
                 <h2>Parallelism</h2>
                 <pre>
-                    <code>
+                    <code class="groovy">
    parallel (
      "stream 1" : { ... steps ...  },
      "stream 2" : { ... steps in parallel ... }
@@ -577,7 +577,7 @@ node {
             <section>
                 <h2>Add license check to unit test stage</h2>
                 <pre>
-                    <code>
+                    <code class="groovy">
 parallel(
    'licenseCheck': { sh "${mvnHome}/bin/mvn license:check" },
    'unitTest': {
@@ -593,6 +593,38 @@ parallel(
 )
                     </code>
                 </pre>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h1>Integration Tests</h1>
+            </section>
+            <section>
+                <h2>New Stage 'IT'</h2>
+                <pre>
+                    <code class="groovy">
+    stage "IT"
+    try {
+        sh "${mvnHome}/bin/mvn -B test -Pit"
+    } catch (err) {
+        step([$class: 'JUnitResultArchiver',
+            testResults: '**/target/surefire-reports/TEST-*.xml'])
+        // mailing code here
+        throw err
+    }
+                    </code>
+                </pre>
+            </section>
+            <section>
+                <h2>Create a New Integration Test</h2>
+                <ul>
+                    <li>Retrieve a document with a given ID.</li>
+                    <li>Assert correct http status.</li>
+                    <li>Assert correct content.</li>
+                    <li>Hint: add test method to DocumentRestTest class.</li>
+                    <li>Hint: use @BeforeClass.</li>
+                    <li>Hint: use @FixMethodOrder.</li>
+                </ul>
             </section>
         </section>
         <section>
