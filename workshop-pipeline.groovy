@@ -45,7 +45,7 @@ node {
         throw err
     }
 
-    stage 'Deploy'
+    stage name: 'Deploy', concurrency: 1
     timeout(time: 40, unit: 'SECONDS') {
         input message: 'Do you want to release version, ' +  version + '?', ok: 'Release'
     }

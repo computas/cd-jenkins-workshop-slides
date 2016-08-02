@@ -48,30 +48,29 @@
         <section id="objectives">
             <h2>Objectives</h2>
             <ul>
-                <li>Improved understanding of and knowledge about Continuous Integration, Delivery, and Deployment</li>
-                <li>Describe the pipeline concept</li>
+                <li>Improve understanding of and knowledge about continuous delivery (CD).</li>
+                <li>Describe the pipeline concept.</li>
                 <li>Understand CD stack components and roles.</li>
-                <li>Application Architecture requirements for CD (i.e. parallel tests etc).</li>
+                <li>Application architecture requirements for CD.</li>
             </ul>
         </section>
         <section id="prerequisites">
             <h2>Prerequisites</h2>
             <ul>
-                <li>Bring your own PC</li>
-                <li>Some programming experience</li>
-                <li>Interest in DevOps</li>
-                <li>Active participation</li>
-                <li>Basic linux command line knowledge</li>
+                <li>Bring your own PC.</li>
+                <li>Some programming experience.</li>
+                <li>Interest in DevOps.</li>
+                <li>Active participation.</li>
+                <li>Basic linux command line knowledge.</li>
             </ul>
         </section>
         <section id="outline">
             <h2>Outline</h2>
             <ul>
-                <li>Some theory about Continuous Delivery and friends.</li>
-                <li>Setting up the environment.</li>
+                <li>Some theory about continuous delivery.</li>
+                <li>Setting up the workshop environment.</li>
                 <li>Implementing a simple pipeline for a given project.</li>
                 <li>Adding new code with test first.</li>
-                <li>Theory and practice</li>
             </ul>
         </section>
         <section id="ci-cd">
@@ -182,6 +181,7 @@
                     <li>Password: 1234!abcd</li>
                     <li>Full name: Admin</li>
                     <li>E-mail address: vagrant@localhost</li>
+                    <li>Press 'Save and Finish'</li>
                 </ul>
             </section>
             <section>
@@ -383,16 +383,28 @@ node {
         </section>
         <section>
             <section>
-                <h1>Delivery</h1>
-                <h1>Deployment</h1>
+                <h1>Delivery<br/>/<br/>Deployment</h1>
             </section>
             <section>
                 <h2>Configure Artifactory Access</h2>
-                <p style="text-align: center">login with: admin/password</p>
+                <ul>
+                    <li>Open <a href="http://192.168.33.10:8081">http://192.168.33.10:8081</a>.<br/>
+                        (Restart the vagrant box if Artifactory is not up and running.)
+                    </li>
+                    <li>Login with admin/password.</li>
+                    <li>Create a new permission 'deploy-local'.</li>
+                    <li>Add the libs-release-local repository.</li>
+                    <li>Add the libs-snapshot-local repository.</li>
+                    <li>Add the user 'anonymous', and check 'Delete/Overwrite'.</li>
+                    <li>Press 'Save and Finish'.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Configure Artifactory Access</h3>
                 <img src="artifactory-permission-deploy-1.jpg" width="1065" height="449"/>
             </section>
             <section>
-                <h2>Configure Artifactory Access</h2>
+                <h3>Configure Artifactory Access</h3>
                 <img src="artifactory-permission-deploy-2.jpg" width="914" height="229"/>
             </section>
             <section>
@@ -476,15 +488,19 @@ node {
             <section>
                 <h2>Configure ssh keys for Jenkins</h2>
                 <ul>
+                    <li>Fork <a href="https://github.com/mgfeller/sample-spring-app.git">https://github.com/mgfeller/sample-spring-app.git</a>.
+                    </li>
                     <li><span class="inlinecode">vagrant ssh</span></li>
-                    <li><span class="inlinecode">ssh-keygen</span><br/>(without passphrase)</li>
+                    <li>Unless keys exist: <span class="inlinecode">ssh-keygen</span> (without passphrase)</li>
+                    <li>Add the public key (id_rsa.pub) to <em>your</em> github account.</li>
+                    <li>Clone your fork with ssh to authorize the github server on the vagrant box.</li>
                     <li><span class="inlinecode">sudo cp -r ~/.ssh /var/lib/jenkins</span></li>
                     <li><span class="inlinecode">sudo chown -R jenkins:jenkins /var/lib/jenkins/.ssh</span></li>
-                    <li>Add the public key (id_rsa.pub) to your github account.</li>
                 </ul>
             </section>
             <section>
                 <h2>Adjust 'checkout' stage</h2>
+                <p>Use the 'sample-spring-app'-repository from your github account.</p>
                 <pre>
                     <code class="groovy">
    stage 'Checkout'
@@ -542,7 +558,7 @@ node {
                 </ul>
             </section>
             <section>
-                <h2>Change 'deploy'-stage</h2>
+                <h2>Adjust 'deploy' stage</h2>
                 <pre>
                     <code class="groovy">
     stage 'Deploy'
@@ -643,6 +659,15 @@ parallel(
                 <h2>Concurrency</h2>
                 <img src="concurrency.jpg" width="707" height="418">
             </section>
+            <section>
+                <h2>Adjust 'Deploy'-stage</h2>
+                <pre>
+                    <code class="groovy">
+                        stage name: 'Deploy', concurrency: 1
+                    </code>
+                </pre>
+                <p style="text-align: center">Save, then start two concurrent builds.</p>
+            </section>
         </section>
         <section>
             <section>
@@ -660,16 +685,18 @@ parallel(
                 </ul>
             </section>
         </section>
-        <section id="resources-acknowledgements">
+        <section id="resources">
             <h2>Resources</h2>
             <ul>
-                <li><a href="https://dzone.com/refcardz/continuous-delivery-with-jenkins-workflow">DZone Refcard #218:
+                <li><a href="https://dzone.com/refcardz/continuous-delivery-with-jenkins-workflow">DZone Refcard:
                     Continuous Delivery With Jenkins Workflow</a></li>
-                <li><a href="https://github.com/jenkinsci/pipeline-plugin/blob/master/TUTORIAL.md">Pipeline Tutorial, by
-                    Jenkins</a></li>
-                <li><a href="https://jenkins.io/doc/book/pipeline-as-code/">Pipeline as Code, by Jenkins</a></li>
+                <li><a href="https://github.com/jenkinsci/pipeline-plugin/blob/master/TUTORIAL.md">Pipeline Tutorial</a>
+                </li>
+                <li><a href="https://jenkins.io/doc/book/pipeline-as-code/">Pipeline as Code</a></li>
                 <li><a href="https://www.cloudbees.com/blog/parallelism-and-distributed-builds-jenkins">Parallelism and
-                    Distributed Builds with Jenkins, by CloudBees</a></li>
+                    Distributed Builds with Jenkins</a></li>
+                <li><a href="https://github.com/jenkinsci/pipeline-plugin/blob/master/COMPATIBILITY.md">Compatible
+                    Jenkins plugins</a></li>
                 <!--
                                 <li><a href="http://ow.ly/UZIBE">John Willis (Docker Inc.) Presentations</a></li>
                                 <li><a href="http://vfarcic.github.io/ms-workshop/#/cover">Microservices Lifecycle Workshop by Viktor
