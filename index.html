@@ -31,6 +31,21 @@
             color: #336699;
             /*background-color: #111111;*/
         }
+
+        .reveal .slides section .fragment.fade-down {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .reveal .slides section .fragment.fade-down.visible,
+        .reveal .slides section .fragment.visible:not(.current-fragment) {
+            color: grey;
+        }
+
+        .reveal .slides section .fragment.fade-down,
+        .reveal .slides section .fragment.current-fragment {
+            color: #ffffff;
+        }
     </style>
 
 </head>
@@ -244,7 +259,7 @@
         <section>
             <section>
                 <h1>Pipeline</h1>
-                <img src="pipeline-pipeline-beer-533x400.jpg" width="533" height="400"/>
+                <!--<img src="pipeline-pipeline-beer-533x400.jpg" width="533" height="400"/>-->
             </section>
             <section>
                 <h2>What is a pipeline?</h2>
@@ -277,10 +292,10 @@
             <section>
                 <h2>Pipeline Concepts</h2>
                 <ul>
-                    <li>What flows through the pipeline?</li>
-                    <li>Build artifacts only once.</li>
-                    <li>Increasing certainty and quality along the pipeline.</li>
-                    <li>Quick feedback.</li>
+                    <li class="fragment">What is transported through the pipeline?</li>
+                    <li class="fragment">Build artifacts only once.</li>
+                    <li class="fragment">Increasing certainty and quality along the pipeline.</li>
+                    <li class="fragment">Quick feedback.</li>
                 </ul>
             </section>
             <aside class="notes">
@@ -398,20 +413,26 @@ node {
             </section>
         </section>
         <section>
-            <h2>Summary</h2>
+            <h2>Pipeline Summary</h2>
             <ul>
-                <li>Pipeline:</li>
-                <li>Step: a single task for Jenkins to execute.</li>
-                <li>Stage: a logical grouping of one or several steps.</li>
-                <li>Node: a step that schedules to run the steps it contains on a local or remote agent.</li>
-                <li>Workspace: a dedicated area on a disk, created by the node step. Removed once all steps contained in
+                <li class="fragment"><strong>Pipeline</strong>: a structure to transport software artifacts.</li>
+                <li class="fragment"><strong>Step</strong>: a single task for Jenkins to execute.</li>
+                <li class="fragment"><strong>Stage</strong>: a logical grouping of one or several steps.</li>
+                <li class="fragment"><strong>Node</strong>: a step that schedules to run the steps it contains on a
+                    local or remote agent.
+                </li>
+                <li class="fragment"><strong>Workspace</strong>: a dedicated area on a disk, created by the node step.
+                    Removed once all steps contained in
                     that node have finished executing.
                 </li>
             </ul>
         </section>
         <section>
             <section>
-                <h1>Delivery<br/>/<br/>Deployment</h1>
+                <h1>Delivery
+                    <hr/>
+                    Deployment
+                </h1>
             </section>
             <section>
                 <h2>Configure Artifactory Access</h2>
@@ -610,9 +631,10 @@ node {
             <section>
                 <h2>Manual Steps and Approval</h2>
                 <ul>
-                    <li>UAT</li>
-                    <li>Exploratory testing</li>
-                    <li>Approval for delivery or deployment</li>
+                    <li class="fragment">UAT</li>
+                    <li class="fragment">Exploratory testing</li>
+                    <li class="fragment">Approval for delivery</li>
+                    <li class="fragment">Approval for deployment</li>
                 </ul>
             </section>
             <section>
@@ -648,7 +670,7 @@ node {
    )
                     </code>
                 </pre>
-                <p style="text-align: center">If one stream fails, the whole parellel block fails.</p>
+                <p style="text-align: center">If one stream fails, the whole parallel block fails.</p>
             </section>
             <section>
                 <h2>Add license check to unit test stage</h2>
@@ -729,8 +751,20 @@ parallel(
         </section>
         <section>
             <section>
-                <h2>Summary</h2>
+                <h1>Workshop Summary</h1>
+            </section>
+            <section>
+                <h3>Pipeline</h3>
                 <img src="pipeline.jpg" width="707" height="500"/>
+            </section>
+            <section>
+                <h3>Key Points</h3>
+                <ul>
+                    <li class="fragment">Build each artifact only once.</li>
+                    <li class="fragment">Every deployed artifact must have a version, and a tag in VCS.</li>
+                    <li class="fragment">Versioning and deploying should not change the commit history.</li>
+                    <li class="fragment">More?</li>
+                </ul>
             </section>
         </section>
         <section>
@@ -738,9 +772,11 @@ parallel(
                 <h2>Suggestion for further work</h2>
                 <ul>
                     <li>Rerun pipeline instances.</li>
-                    <li>Multi branch builds</li>
-                    <li>Jenkinsfile</li>
-                    <li>Scale Jenkins infrastructure</li>
+                    <li>Support multi branch builds.</li>
+                    <li>Use Jenkins file.</li>
+                    <li>Scale Jenkins infrastructure.</li>
+                    <li>Deploy the Spring Boot application to 'prod' (i.e. the workshop server).</li>
+                    <li>Create a docker container with the Spring Boot application.</li>
                 </ul>
             </section>
         </section>
@@ -766,7 +802,14 @@ parallel(
                 -->
             </ul>
         </section>
-
+        <section id="thank-you" data-background-image="pipeline-pipeline-beer-400x300.jpg"
+                 data-background-repeat="repeat" data-background-size="400px 300px" data-background-position="bottom">
+            <h2>Thank You for Your Attention!</h2>
+            <hr/>
+            <h4>Michael Gfeller</h4>
+            <h4><a href="http://www.computas.com">Computas AS</a></h4>
+            <h4><a href="http://www.mgfeller.net">www.mgfeller.net</a></h4>
+        </section>
     </div>
 </div>
 
