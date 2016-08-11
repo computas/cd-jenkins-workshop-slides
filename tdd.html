@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>CD Git Intro</title>
+
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/black.css">
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- Printing and PDF exports -->
+        <script>
+         var link = document.createElement('link');
+         link.rel = 'stylesheet';
+         link.type = 'text/css';
+         link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+         document.getElementsByTagName('head')[0].appendChild(link);
+        </script>
+
+        <style type="text/css">
+         p {
+             text-align: left;
+         }
+
+         span.inlinecode {
+             font-family: "Courier New", monospace;
+             color: #336699;
+             /*background-color: #111111;*/
+         }
+        </style>
+
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section id="cover">
+                    <h1>Continuous Delivery Workshop</h1>
+                    <h2>Test Driven Development</h2>
+                    <hr/>
+                    <h4>Sigmund Hansen</h4>
+                    <h4><a href="www.computas.com">Computas AS</a></h4>
+                </section>
+                <section id="objectives">
+                    <h2>Requirements</h2>
+                    <img src="Software%20Requirements.jpg">
+                    <a href="http://scrum-basics.blogspot.no/2014/12/agile-overview.html">http://scrum-basics.blogspot.no/2014/12/agile-overview.html</a>
+                    <aside class="notes">
+                        <ul>
+                            <li>Different interpretations</li>
+                            <li>Lack of communication</li>
+                            <li>Hard to know what you want or need before you have it!</li>
+                        </ul>
+                    </aside>
+                </section>
+                <section id="agile">
+                    <h2>Agile Methods</h2>
+                    <ul>
+                        <li>Short feedback cycles</li>
+                        <li>Changing requirements and plans</li>
+                        <li>Reactive (pivot and adapt)</li>
+                    </ul>
+                </section>
+                <section id="tdd"">
+                    <section id="tdd-cycle">
+                        <h2>Test Driven Development</h2>
+                        <img src="tdd-cycle.png">
+                        <a href="https://niden.net/tag/test%20driven%20development">https://niden.net/tag/test%20driven%20development</a>
+                        <aside class="notes">
+                            <ul>
+                                <li>
+                                    Test first:
+                                    <ul>
+                                        <li>Great for new projects</li>
+                                        <li>Always when fixing bugs</li>
+                                    </ul>
+                            </ul>
+                        </aside>
+                    </section>
+                    <section id="test-types">
+                        <h2>Different Kinds of Tests</h2>
+                        <ul>
+                            <li>Automated vs. Manual tests</li>
+                            <li>Unit tests</li>
+                            <li>Integration tests</li>
+                            <li>Acceptance tests</li>
+                            <li>And more</li>
+                        </ul>
+                    </section>
+                    <section id="regression-tests">
+                        <h2>Regression tests</h2>
+                        <ul>
+                            <li>Write tests before fixing bugs</li>
+                            <li>Fix the bug</li>
+                            <li>Regressions shall not pass!</li>
+                            <li>IMHO - Test Priority No. 1</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Mutation Testing</h2>
+                        <ul>
+                            <li>Test your tests</li>
+                            <li>Quality of tests</li>
+                            <li>Can be sloooooow</li>
+                            <li><a href="https://2016.javazone.no/program/dial-m-for-mutation">JavaZone 2016 - Dial M for Mutation</a></li>
+                    </section>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+         // More info https://github.com/hakimel/reveal.js#configuration
+         Reveal.initialize({
+             history: true,
+
+             // More info https://github.com/hakimel/reveal.js#dependencies
+             dependencies: [
+                 {src: 'plugin/markdown/marked.js'},
+                 {src: 'plugin/markdown/markdown.js'},
+                 {src: 'plugin/notes/notes.js', async: true},
+                 {
+                     src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                         hljs.initHighlightingOnLoad();
+                     }
+                 }
+             ]
+         });
+        </script>
+    </body>
+</html>
