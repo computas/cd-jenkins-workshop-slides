@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>CD Git Intro</title>
+
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/black.css">
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- Printing and PDF exports -->
+        <script>
+         var link = document.createElement('link');
+         link.rel = 'stylesheet';
+         link.type = 'text/css';
+         link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+         document.getElementsByTagName('head')[0].appendChild(link);
+        </script>
+
+        <style type="text/css">
+         p {
+             text-align: left;
+         }
+
+         span.inlinecode {
+             font-family: "Courier New", monospace;
+             color: #336699;
+             /*background-color: #111111;*/
+         }
+        </style>
+
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section id="cover">
+                    <h1>Continuous Delivery Workshop</h1>
+                    <h2>Intro to Git</h2>
+                    <hr/>
+                    <h4>Sigmund Hansen</h4>
+                    <h4><a href="www.computas.com">Computas AS</a></h4>
+                </section>
+                <section id="objectives">
+                    <h2>Objectives</h2>
+                    <ul>
+                        <li>Install Git</li>
+                        <li>Basic introduction to Git and tools</li>
+                        <li>Git workflows</li>
+                    </ul>
+                </section>
+                <section id="tools">
+                    <section id="getgit">
+                        <h2>Get Git</h2>
+                        <hr>
+                        <h4><a href="https://git-scm.com/download">https://git-scm.com/download</a></h4>
+                    </section>
+                    <section id="gui">
+                        <h2>GUI clients</h2>
+                        <ul>
+                            <li>Atlassian SourceTree</li>
+                            <li>GitKraken</li>
+                            <li>TortoiseGit (context menus in Windows)</li>
+                            <li>Your IDE of choice</li>
+                            <li><a href="https://git-scm.com/downloads/guis">https://git-scm.com/downloads/guis</a></li>
+                        </ul>
+                    </section>
+                    <section id="cygwin">
+                        <h2>Cygwin</h2>
+                        <ul>
+                            <li>Does not play well with Windows GUI clients</li>
+                            <li>Screwy Linux permissions</li>
+                            <li>Cache not compatible with Git for Windows</li>
+                        </ul>
+                    </section>
+                    <section id="remotes">
+                        <h2>Server Providers</h2>
+                        <ul>
+                            <li>GitHub</li>
+                            <li>Bitbucket</li>
+                            <li>GitLab</li>
+                        </ul>
+                    </section>
+                </section>
+                <section id="workflows">
+                    <section>
+                        <h2>Get these slides</h2>
+                        <pre>
+                            <code class="bash">
+git clone https://github.com/mgfeller/cd-jenkins-workshop-slides.git
+                            </code>
+                        </pre>
+                    </section>
+                    <section id="basic">
+                        <h2>Basic workflow</h2>
+                        <ul>
+                            <li>Edit file</li>
+                            <li>Add and commit</li>
+                            <li>Pull remote changes and handle conflicts</li>
+                            <li>Push changes to remote</li>
+                        </ul>
+                        <pre>
+                            <code class="bash">
+git add index.html
+git commit -m "Fixes stuff."
+git pull
+git push
+                            </code>
+                        </pre>
+                    </section>
+                    <section id="branching-overview">
+                        <h2>Branching workflow</h2>
+                        <ul>
+                            <li>Create branch for feature/bugfix</li>
+                            <li>Make changes, possibly multiple commits</li>
+                            <li>Create a pull request (web interface, email, IRC)</li>
+                        </ul>
+                    </section>
+                    <section id="branching-creating">
+                        <h2>Creating branches 1</h2>
+                        <ul>
+                            <li>Create the branch locally and push it:
+                                <pre>
+                                    <code class="bash">
+git checkout -b my-feature
+...
+git push -u origin my-feature
+                                    </code>
+                                </pre>
+                            </li>
+                        </ul>
+                        <aside class="notes">
+                            <ul>
+                                <li>checkout -b Both creates a branch and switches to it</li>
+                                <li>push -u Sets up tracking of this branch to the remote</li>
+                                <li>push remote-name branch-name Pushes branch-name with the same name locally and at the named remote</li>
+                            </ul>
+                        </aside>
+                    </section>
+                    <section id="branching-creating2">
+                        <h2>Creating branches 2</h2>
+                        <ul>
+                            <li>Create remotely through web interface and checkout:
+                                <pre>
+                                    <code class="bash">
+git fetch
+git checkout my-feature
+                                    </code>
+                                </pre>
+                            </li>
+                            <li>For ancient git: <pre><code class="bash">git checkout -b my-feature origin/my-feature</code></pre></li>
+                        </ul>
+                    </section>
+                    <section id="branching-pull-requests">
+                        <h2>Pull Requests</h2>
+                        <ul>
+                            <li>Request to pull/merge branches</li>
+                            <li>Server providers implement this</li>
+                            <li>Without Git providers, email works</li>
+                            <li>Conflicts?
+                                <ul>
+                                    <li>Merge manually</li>
+                                    <li>Fix in branch before pulling</li>
+                                </ul>
+                            </li>
+                            <li>More control</li>
+                            <li>Functions as code review</li>
+                        </ul>
+                    </section>
+                    <section id="gitflow">
+                        <h2>GitFlow</h2>
+                        <ul>
+                            <li>Variation of branching workflow:
+                                <ul>
+                                    <li>master = production (tagged releases)</li>
+                                    <li>develop = what's usually on master</li>
+                                    <li>hotfix/xyz = patch branched from master</li>
+                                    <li>feature/abc = feature branched from develop</li>
+                                    <li>release/v123 = release branched from develop</li>
+                                </ul>
+                            </li>
+                            <li>Server providers may have special support</li>
+                            <li>Clients may have special support</li>
+                            <li>Own command line plugins</li>
+                        </ul>
+                    </section>
+                    <section id="gitflow-gfx">
+                        <h2>Behind the wall of text</h2>
+                        <img style="background-color: #ffffff; max-height: 500px" src="https://www.atlassian.com/git/images/tutorials/collaborating/comparing-workflows/gitflow-workflow/05.svg" />
+                    </section>
+                    <section id="forking">
+                        <h2>Forking</h2>
+                        <ul>
+                            <li>Personal remote copy</li>
+                            <li>Common in OSS</li>
+                            <li>Pull request across forks</li>
+                            <li>Never lose local work!</li>
+                        </ul>
+                    </section>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+         // More info https://github.com/hakimel/reveal.js#configuration
+         Reveal.initialize({
+             history: true,
+
+             // More info https://github.com/hakimel/reveal.js#dependencies
+             dependencies: [
+                 {src: 'plugin/markdown/marked.js'},
+                 {src: 'plugin/markdown/markdown.js'},
+                 {src: 'plugin/notes/notes.js', async: true},
+                 {
+                     src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                         hljs.initHighlightingOnLoad();
+                     }
+                 }
+             ]
+         });
+        </script>
+    </body>
+</html>
