@@ -1,0 +1,838 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>CD Jenkins Workshop</title>
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/black.css">
+
+    <!-- Theme used for syntax highlighting of code -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+
+    <style type="text/css">
+        p {
+            text-align: left;
+        }
+
+        span.inlinecode {
+            font-family: "Courier New", monospace;
+            color: #336699;
+            /*background-color: #111111;*/
+        }
+
+        .reveal .slides section .fragment.fade-down {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .reveal .slides section .fragment.fade-down.visible,
+        .reveal .slides section .fragment.visible:not(.current-fragment) {
+            color: grey;
+        }
+
+        .reveal .slides section .fragment.fade-down,
+        .reveal .slides section .fragment.current-fragment {
+            color: #ffffff;
+        }
+    </style>
+
+</head>
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section id="cover">
+            <h1>Continuous Delivery Workshop</h1>
+            <h2>Pipeline as Code with Jenkins</h2>
+            <hr/>
+            <h4>Michael Gfeller</h4>
+            <h4><a href="www.computas.com">Computas AS</a></h4>
+            <h4><a href="www.mgfeller.net">www.mgfeller.net</a></h4>
+        </section>
+        <section id="objectives">
+            <h2>Objectives</h2>
+            <ul>
+                <li>Improve understanding of and knowledge about continuous delivery (CD).</li>
+                <li>Describe the pipeline concept.</li>
+                <li>Understand CD stack components and roles.</li>
+                <li>Application architecture requirements for CD.</li>
+            </ul>
+        </section>
+        <section id="prerequisites">
+            <h2>Prerequisites</h2>
+            <ul>
+                <li>Bring your own PC.</li>
+                <li>Some programming experience.</li>
+                <li>Interest in DevOps.</li>
+                <li>Active participation.</li>
+                <li>Basic linux command line knowledge.</li>
+            </ul>
+        </section>
+        <section id="outline">
+            <h2>Outline</h2>
+            <ul>
+                <li>Some theory about continuous delivery.</li>
+                <li>Setting up the workshop environment.</li>
+                <li>Implementing a simple pipeline for a given project.</li>
+                <li>Adding new code with test first.</li>
+            </ul>
+        </section>
+        <section id="ci-cd">
+            <section>
+                <h2>Continuous Delivery</h2>
+                <img alt="Continuous Delivery. Reliable Software Releases Through Build, Test, and Deployment Automation"
+                     src="cd-humble-farley-379x500.jpg" width="379" height="500"/>
+            </section>
+            <section>
+                <h2>Continuous ...</h2>
+                <ul>
+                    <li class="fragment"><strong>Integration</strong>
+                        <div>
+                            <label class="fragment">Every commit is built, tested, packaged and deployed to
+                                test.</label>
+                        </div>
+                    </li>
+                    <li class="fragment"><strong>Delivery</strong>
+                        <div>
+                            <label class="fragment">Every commit <label class="fragment grow highlight-current-green">can
+                                be</label> deployed to production.</label>
+                        </div>
+                    </li>
+                    <li class="fragment"><strong>Deployment</strong>
+                        <div>
+                            <label class="fragment">Every commit <label
+                                    class="fragment grow highlight-current-green">is</label> deployed to
+                                production.</label>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <img alt="Release It! Design and Deploy Production-Ready Software" src="release-it-417x500.jpg"
+                     width="417" height="500"/>
+                <aside class="notes">
+                    <ul>Design and architecture need to support CD.</ul>
+                </aside>
+            </section>
+        </section>
+        <section id="environment">
+            <section>
+                <h2>Workshop Environment</h2>
+                <ul>
+                    <li>VirtualBox with server environment</li>
+                    <li>VirtualBox as Vagrant project, with Puppet</li>
+                    <li>Server: Ubuntu server w/o desktop</li>
+                    <li>Server stack: Jenkins, Artifactory, Maven, Java, Git</li>
+                    <li>Server tools: Vim (spf13-vim), ftp client</li>
+                    <li>Sample project: Spring Boot application with Maven</li>
+                    <li>Development environment locally: IDE, Git client, Java 8, Maven</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Development Environment: as we work with simple code, we can also just use the environment
+                            on the vbox, with nano and vim.
+                        </li>
+                    </ul>
+                </aside>
+            </section>
+            <section>
+                <h2>Get Started!</h2>
+                <p>These slides use <a href="http://lab.hakim.se/reveal-js/#/">reveal.js</a></p>
+                <p>Clone them from <a href="https://github.com/mgfeller/cd-jenkins-workshop-slides">https://github.com/mgfeller/cd-jenkins-workshop-slides</a>.
+                </p>
+                <p>Setup the server environment: follow the instructions (do not configure Jenkins and Artifactory yet)
+                    in the <a href="https://github.com/mgfeller/cd-jenkins-workshop/blob/master/README.md">readme</a> on
+                    <a href="https://github.com/mgfeller/cd-jenkins-workshop">https://github.com/mgfeller/cd-jenkins-workshop</a>.
+                </p>
+                <p>For git configuration on Windows, see the following slides.</p>
+                <aside class="notes">
+                    <ul>
+                        <li>vagrant reload --provision</li>
+                        <li>VirtualBox Guest Additions commented out by default</li>
+                    </ul>
+                </aside>
+            </section>
+            <section>
+                <h2>Git on Windows: Path Configuration</h2>
+                <img src="git-windows-path-config.jpg" width="499" height="387"/>
+            </section>
+            <section>
+                <h2>Git on Windows: Line Ending Configuration</h2>
+                <img src="git-autocrlf-config.jpg" width="499" height="387"/>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h1>Setup Jenkins</h1>
+            </section>
+            <section>
+                <h2>Unlock Jenkins</h2>
+                <ul>
+                    <li>In browser, open <a href="http://192.168.33.10:8080/">http://192.168.33.10:8080/</a>
+                    </li>
+                    <li>On command line, open ssh-shell:<br/>
+                        <span class="inlinecode">ssh vagrant@192.168.33.10</span>, password:
+                        <em>vagrant</em><br/> (or run
+                        <span class="inlinecode">vagrant ssh</span> in the project folder)
+                    </li>
+                    <li>Run <span class="inlinecode">sudo cat /var/lib/jenkins/secrets/initialAdminPassword</span> and
+                        copy this
+                        administrator password into the field in the browser
+                    </li>
+                </ul>
+                <img src="unlock-jenkins-194x200.jpg" alt="Unlock Jenkins" width="194" height="200">
+            </section>
+            <section>
+                <h2>Suggested Plugins</h2>
+                <img alt="Install Suggested Jenkins Plugins" src="customize-jenkins-install-plugins-493x400.jpg"
+                     height="400" width="493"/>
+            </section>
+            <section>
+                <h2>First Admin User</h2>
+                <ul>
+                    <li>Username: admin</li>
+                    <li>Password: 1234!abcd</li>
+                    <li>Full name: Admin</li>
+                    <li>E-mail address: vagrant@localhost</li>
+                    <li>Press 'Save and Finish'</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Jenkins Location</h2>
+                <ul>
+                    <li><a href="http://192.168.33.10:8080/configure">Jenkins > Manage Jenkins > Configure System</a>
+                    </li>
+                    <li>Go to 'Jenkins Location'</li>
+                    <li>Jenkins URL: http://192.168.33.10:8080/</li>
+                    <li>System Admin e-mail address: vagrant@localhost</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Jenkins E-mail Notification</h2>
+                <ul>
+                    <li><a href="http://192.168.33.10:8080/configure">Jenkins > Manage Jenkins > Configure System</a>
+                    </li>
+                    <li>Go to 'E-mail Notification'</li>
+                    <li>SMTP server: localhost</li>
+                    <li>Default user e-mail suffix: @localhost</li>
+                    <li>Send test e-mail to: vagrant@localhost</li>
+                    <li>Verify in ssh-shell by running <span class="inlinecode">mail</span>.</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Jenkins Global Tool Java</h2>
+                <ul>
+                    <li><a href="http://192.168.33.10:8080/configureTools/">Jenkins > Manage Jenkins > Global Tool
+                        Configuration</a></li>
+                    <li>Go to 'JDK'</li>
+                    <li>Add JDK installation</li>
+                    <li>Name: jdk8</li>
+                    <li>JAVA_HOME: /usr/lib/jvm/java-8-oracle/</li>
+                </ul>
+                <aside class="notes">
+                    We're going to build a java and maven project.
+                </aside>
+            </section>
+            <section>
+                <h2>Jenkins Global Tool Maven</h2>
+                <ul>
+                    <li><a href="http://192.168.33.10:8080/configureTools/">Jenkins > Manage Jenkins > Global Tool
+                        Configuration</a></li>
+                    <li>Go to 'Maven'</li>
+                    <li>Add Maven installation</li>
+                    <li>Name: M3</li>
+                    <li>MAVEN_HOME: /usr/share/maven/maven-3.3.9/</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h1>Pipeline</h1>
+                <!--<img src="pipeline-pipeline-beer-533x400.jpg" width="533" height="400"/>-->
+            </section>
+            <section>
+                <h2>What is a pipeline?</h2>
+                <img alt="A pipeline" src="pipeline.jpg" width="707" height="500"/>
+                <aside class="notes">
+                    <ul>
+                        <li>Coined by Humble & Farley</li>
+                        <li>What flows through a pipeline?</li>
+                        <li>We'll implement part of this (show slide where parts are marked)</li>
+                        <li>
+                            <ul>
+                                <li>Clone git repository (not shown in here)</li>
+                                <li>Compile code</li>
+                                <li>Feedback to user</li>
+                                <li>Add License to code</li>
+                                <li>Run tests</li>
+                                <li>Version code (not shown here)</li>
+                                <li>Create and push git tag (not shown here)</li>
+                                <li>Manual steps (approval)</li>
+                                <li>Deploy to a artifact repo</li>
+                            </ul>
+                        </li>
+                        <li>Principles: build each artifact only once!</li>
+                        <li>Versioning (semantic versioning). Every commit a version.</li>
+                        <li>How to use credentials.</li>
+                        <li>Manual steps.</li>
+                    </ul>
+                </aside>
+            </section>
+            <section>
+                <h2>Pipeline Concepts</h2>
+                <ul>
+                    <li class="fragment">What is transported through the pipeline?</li>
+                    <li class="fragment">Build artifacts only once.</li>
+                    <li class="fragment">Increasing certainty and quality along the pipeline.</li>
+                    <li class="fragment">Quick feedback.</li>
+                </ul>
+            </section>
+            <aside class="notes">
+                <ul>
+                    <li>Pipeline transport is the transportation of goods or material through a pipe</li>
+                </ul>
+            </aside>
+        </section>
+        <section>
+            <section>
+                <h2>First Pipeline</h2>
+                <ul>
+                    <li><a href="http://192.168.33.10:8080/view/All/newJob">Jenkins > New Item</a></li>
+                    <li>Item name: workshop</li>
+                    <li>Select 'Pipeline' as project type.</li>
+                    <li>Click 'OK'</li>
+                    <li>Go to 'Pipeline' section in the configuration page.</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Pipeline Script</h2>
+                <pre>
+                    <code class="groovy">
+node {
+   stage 'Checkout'
+
+   git url: 'https://github.com/mgfeller/sample-spring-app.git'
+
+   def mvnHome = tool 'M3'
+
+   stage 'Build'
+
+   sh "${mvnHome}/bin/mvn clean package -DskipTests"
+}
+                    </code>
+                </pre>
+                <p style="text-align: center">Click 'Save', then 'Build now'.</p>
+            </section>
+            <section>
+                <img src="pipeline-first-build.jpg">
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Testing and Feedback</h2>
+                <pre>
+                    <code class="groovy">
+   stage 'Unit Test'
+
+   sh "${mvnHome}/bin/mvn test -DpipelineFailOneTest=true"
+
+   stage 'Deploy'
+
+   echo "Deployed!"
+                    </code>
+                </pre>
+                <p style="text-align: center">Click 'Save', then 'Build now'.</p>
+                <aside class="notes">
+                    <ul>
+                        <li>-DpipelineFailOneTest=true forces one test to fail</li>
+                        <li>we add e-mail notification in a minute</li>
+                    </ul>
+                </aside>
+            </section>
+            <section>
+                <h2>Archiving Test Results</h2>
+                <pre>
+                    <code class="groovy">
+   stage 'Unit Test'
+   try {
+       sh "${mvnHome}/bin/mvn -B test -DpipelineFailOneTest=true"
+   } catch (err) {
+       step([$class: 'JUnitResultArchiver',
+            testResults: '**/target/surefire-reports/TEST-*.xml'])
+       throw err
+   }
+                    </code>
+                </pre>
+                <p style="text-align: center">Click 'Save', then 'Build now'.</p>
+                <aside class="notes">
+                    <li>
+                        <a href="https://support.cloudbees.com/hc/en-us/articles/218866667-How-to-abort-a-Pipeline-build-if-JUnit-tests-fail">How
+                            to abort a Pipeline build if JUnit tests fail</a></li>
+                    <li>Test results are now available in the build page.</li>
+                </aside>
+            </section>
+            <section>
+                <h2>Send E-Mail Notification</h2>
+                <pre>
+                    <code class="groovy">
+        step([$class: 'JUnitResultArchiver',
+            testResults: '**/target/surefire-reports/TEST-*.xml'])
+        mail subject: 'Build Failed - Failed Unit Tests.',
+            body: 'The workshop build failed!',
+            charset: 'utf-8',
+            from: 'vagrant@localhost',
+            mimeType: 'text/plain',
+            to: 'vagrant@localhost'
+        throw err
+                    </code>
+                </pre>
+                <p style="text-align: center">Build, execute <span class="inlinecode">vagrant ssh</span> and check your
+                    <span class="inlinecode">mail</span>!</p>
+            </section>
+            <section>
+                <h2>Get Last Author E-Mail</h2>
+                <pre>
+                    <code class="groovy">
+    sh "git --no-pager show -s --format='%an <%ae>' > lastAuthor.txt"
+    lastAuthor = readFile('lastAuthor.txt').trim()
+    echo "Last author: ${lastAuthor}"
+                    </code>
+                </pre>
+                <p style="text-align: center">E-Mail server not set up to handle external email addresses.</p>
+            </section>
+        </section>
+        <section>
+            <h2>Pipeline Summary</h2>
+            <ul>
+                <li class="fragment"><strong>Pipeline</strong>: a structure to transport software artifacts.</li>
+                <li class="fragment"><strong>Step</strong>: a single task for Jenkins to execute.</li>
+                <li class="fragment"><strong>Stage</strong>: a logical grouping of one or several steps.</li>
+                <li class="fragment"><strong>Node</strong>: a step that schedules to run the steps it contains on a
+                    local or remote agent.
+                </li>
+                <li class="fragment"><strong>Workspace</strong>: a dedicated area on a disk, created by the node step.
+                    Removed once all steps contained in
+                    that node have finished executing.
+                </li>
+            </ul>
+        </section>
+        <section>
+            <section>
+                <h1>Delivery
+                    <hr/>
+                    Deployment
+                </h1>
+            </section>
+            <section>
+                <h2>Configure Artifactory Access</h2>
+                <ul>
+                    <li>Open <a href="http://192.168.33.10:8081">http://192.168.33.10:8081</a>.<br/>
+                        (Restart the vagrant box if Artifactory is not up and running.)
+                    </li>
+                    <li>Login with admin/password.</li>
+                    <li>Create a new permission 'deploy-local'.</li>
+                    <li>Add the libs-release-local repository.</li>
+                    <li>Add the libs-snapshot-local repository.</li>
+                    <li>Add the user 'anonymous', and check 'Delete/Overwrite'.</li>
+                    <li>Press 'Save and Finish'.</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Configure Artifactory Access</h3>
+                <img src="artifactory-permission-deploy-1.jpg" width="1065" height="449"/>
+            </section>
+            <section>
+                <h3>Configure Artifactory Access</h3>
+                <img src="artifactory-permission-deploy-2.jpg" width="914" height="229"/>
+            </section>
+            <section>
+                <h2>Pipeline</h2>
+                <pre>
+                    <code class="groovy">
+    // adjust this line, set  -DpipelineFailOneTest=false
+    sh "${mvnHome}/bin/mvn -B test -DpipelineFailOneTest=false"
+                    </code>
+                </pre>
+                <pre>
+                    <code class="groovy">
+   stage 'Deploy'
+   sh "${mvnHome}/bin/mvn deploy"
+                    </code>
+                </pre>
+            </section>
+            <section>
+                <h2>Deployed!</h2>
+                <img src="artifactory-deployed.jpg" height="493" width="724"/>
+                <aside class="notes">
+                    <ul>
+                        <li>But: snapshot? This is not a release, and cannot be delivered / deployed!</li>
+                    </ul>
+                </aside>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Versioning</h2>
+                <ul>
+                    <li>Each (potential) release must have a version.</li>
+                    <li>Which versioning scheme should be used?</li>
+                    <li>Why should we care about versioning scheme?</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Challenge: compatibility between services.</li>
+                    </ul>
+                </aside>
+            </section>
+            <section>
+                <h2>Semantic Versioning</h2>
+                <p>From <a href="http://semver.org/">http://semver.org/ (Semantic Versioning 2.0.0)</a>:</p>
+                <p>Given a version number MAJOR.MINOR.PATCH, increment the:</p>
+                <ol>
+                    <li>MAJOR version when you make incompatible API changes,</li>
+                    <li>MINOR version when you add functionality in a backwards-compatible manner, and</li>
+                    <li>PATCH version when you make backwards-compatible bug fixes.</li>
+                </ol>
+                <p>Additional labels for pre-release and build metadata are available as extensions to the
+                    MAJOR.MINOR.PATCH format.</p>
+                <aside class="notes">
+                    <ul>
+                        <li>Discuss: example for incompatible API change, etc.</li>
+                    </ul>
+                </aside>
+            </section>
+            <section>
+                <h2>Continuous Versioning</h2>
+                <ul>
+                    <li>Define a base version in the pipeline.</li>
+                    <li>Extend with build number.</li>
+                    <li>Extend with time stamp.</li>
+                    <li>But: how to know and set the semantic version?</li>
+                </ul>
+                <aside class="notes">
+                    <ul>
+                        <li>Integration with Jira?</li>
+                    </ul>
+                </aside>
+            </section>
+            <section>
+                <h2>Parametrize Build</h2>
+                <p style="text-align: center">(not semantic, for the time being)</p>
+                <img src="versioning-jenkins-build-parametrize.jpg" width="919" height="269"/>
+            </section>
+            <section>
+                <h2>Set Version in 'build' Stage</h2>
+                <pre>
+                    <code class="groovy">
+   stage 'Build'
+   def version = "${BASE_VERSION}-" +
+        currentBuild.number.toString().padLeft(4,'0')
+   sh "${mvnHome}/bin/mvn versions:set -DnewVersion=${version}"
+   sh "${mvnHome}/bin/mvn clean package -DskipTests"
+                    </code>
+                </pre>
+                <p style="text-align: center">Uncheck 'Use Groovy Sandbox' in pipeline configuration.</p>
+                <p style="text-align: center">Click 'Save', then 'Build with Parameters'.</p>
+            </section>
+            <section>
+                <h2>Deployed!</h2>
+                <img src="versioning-artifactory-deployed.jpg" width="585" height="426"/>
+                <aside class="notes">
+                    <ul>
+                        <li>repo's are configured in pom file</li>
+                        <li>this is not how it should be done, it should be in an external settings file.</li>
+                    </ul>
+                </aside>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Tag in VCS</h2>
+                <ul>
+                    <li>Each (approved) release should have a tag in VCS.</li>
+                    <li>Tagging (and versioning) should not change the commit history.</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Configure ssh keys for Jenkins</h2>
+                <ul>
+                    <li>Fork <a href="https://github.com/mgfeller/sample-spring-app.git">https://github.com/mgfeller/sample-spring-app.git</a>.
+                    </li>
+                    <li><span class="inlinecode">vagrant ssh</span></li>
+                    <li>Unless keys exist: <span class="inlinecode">ssh-keygen</span> (without passphrase)</li>
+                    <li>Add the public key (id_rsa.pub) to <em>your</em> github account.</li>
+                    <li>Clone your fork with ssh to authorize the github server on the vagrant box.</li>
+                    <li><span class="inlinecode">sudo cp -r ~/.ssh /var/lib/jenkins</span></li>
+                    <li><span class="inlinecode">sudo chown -R jenkins:jenkins /var/lib/jenkins/.ssh</span></li>
+                </ul>
+            </section>
+            <section>
+                <h2>Adjust 'checkout' stage</h2>
+                <p>Use the 'sample-spring-app'-repository from your github account.</p>
+                <pre>
+                    <code class="groovy">
+   stage 'Checkout'
+   git url: 'git@github.com:mgfeller/sample-spring-app.git'
+                    </code>
+                </pre>
+            </section>
+            <section>
+                <h2>Add Stage 'tag'</h2>
+                <pre>
+                    <code class="groovy">
+    stage 'Tag'
+    sh "git config user.name \"Vagrant Builder\""
+    sh "git config user.email vagrant@localhost"
+    def comment = "\"Automatically created tag ${version}\""
+    sh "git tag -a -m ${comment} ${version}"
+    sh "git push origin ${version}"
+                    </code>
+                </pre>
+                <p style="text-align: center">Click 'Save', then 'Build with Parameters'.</p>
+            </section>
+            <section>
+                <h2>Tagged!</h2>
+                <img src="tagged-github.jpg" width="890" height="377"/>
+            </section>
+            <!--
+                        <section>
+                            <h2>Configure Credentials in Jenkins</h2>
+                            <ul>
+                                <li>Using ssh keys.</li>
+                                <li>Upload public key to github.</li>
+                                <li>Add a 'SSH Username with private key' to 'Global credentials (unrestricted)'</li>
+                                <li>Use your private key.</li>
+                                <li>Copy the credential's ID for usage in the 'Checkout' stage.</li>
+                            </ul>
+                        </section>
+                        <section>
+                            <h2>Adjust 'checkout' stage</h2>
+                            <pre>
+                                <code class="groovy">
+               stage 'Checkout'
+               git url: 'git@github.com:mgfeller/sample-spring-app.git', credentialsId: '0eb4ae1a-cfee-4018-9521-d6237ad5ef5c'
+                                </code>
+                            </pre>
+                        </section>
+            -->
+        </section>
+        <section>
+            <section>
+                <h2>Manual Steps and Approval</h2>
+                <ul>
+                    <li class="fragment">UAT</li>
+                    <li class="fragment">Exploratory testing</li>
+                    <li class="fragment">Approval for delivery</li>
+                    <li class="fragment">Approval for deployment</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Adjust 'deploy' stage</h2>
+                <pre>
+                    <code class="groovy">
+    stage 'Deploy'
+    timeout(time: 20, unit: 'SECONDS') {
+        input message: 'Do you want to deploy version, ' +
+                        version + '?', ok: 'Deploy'
+    }
+
+    sh "git config user.name \"Vagrant Builder\""
+    sh "git config user.email vagrant@localhost"
+    def comment = "\"Automatically created tag ${version}\""
+    sh "git tag -a -m ${comment} ${version}"
+    sh "git push origin ${version}"
+
+    sh "${mvnHome}/bin/mvn deploy"
+                    </code>
+                </pre>
+                <p>Move tagging to this stage as well. Save and build. Hover over deploy-stage when it pauses.</p>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Parallelism</h2>
+                <pre>
+                    <code class="groovy">
+   parallel (
+     "stream 1" : { ... steps ...  },
+     "stream 2" : { ... steps in parallel ... }
+   )
+                    </code>
+                </pre>
+                <p style="text-align: center">If one stream fails, the whole parallel block fails.</p>
+            </section>
+            <section>
+                <h2>Add license check to unit test stage</h2>
+                <pre>
+                    <code class="groovy">
+parallel(
+   'licenseCheck': { sh "${mvnHome}/bin/mvn license:check" },
+   'unitTest': {
+       try {
+            sh "${mvnHome}/bin/mvn -B test -DpipelineFailOneTest=false"
+       } catch (err) {
+            step([$class: 'JUnitResultArchiver',
+                testResults: '**/target/surefire-reports/TEST-*.xml'])
+            // mailing code here
+            throw err
+       }
+   }
+)
+                    </code>
+                </pre>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h1>Integration Tests</h1>
+            </section>
+            <section>
+                <h2>New Stage 'IT'</h2>
+                <pre>
+                    <code class="groovy">
+    stage "IT"
+    try {
+        sh "${mvnHome}/bin/mvn -B test -Pit"
+    } catch (err) {
+        step([$class: 'JUnitResultArchiver',
+            testResults: '**/target/surefire-reports/TEST-*.xml'])
+        // mailing code here
+        throw err
+    }
+                    </code>
+                </pre>
+            </section>
+            <section>
+                <h2>Create a New Integration Test</h2>
+                <ul>
+                    <li>Retrieve a document with a given ID.</li>
+                    <li>Assert correct http status.</li>
+                    <li>Assert correct content.</li>
+                    <li>Hint: add test method to DocumentRestTest class.</li>
+                    <li>Hint: use @BeforeClass.</li>
+                    <li>Hint: use @FixMethodOrder.</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Return Document as HTML</h2>
+                <ul>
+                    <li>Document returned as HTML when the URL is <em>/documents/{id}.html</em>.</li>
+                    <li>Add a new method to the test class.</li>
+                    <li>Assert that the returned content type is compatible to <em>text/html</em></li>
+                    <li>Fix the failing test.</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Concurrency</h2>
+                <img src="concurrency.jpg" width="707" height="418">
+            </section>
+            <section>
+                <h2>Adjust 'Deploy'-stage</h2>
+                <pre>
+                    <code class="groovy">
+                        stage name: 'Deploy', concurrency: 1
+                    </code>
+                </pre>
+                <p style="text-align: center">Save, then start two concurrent builds.</p>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h1>Workshop Summary</h1>
+            </section>
+            <section>
+                <h3>Pipeline</h3>
+                <img src="pipeline.jpg" width="707" height="500"/>
+            </section>
+            <section>
+                <h3>Key Points</h3>
+                <ul>
+                    <li class="fragment">Build each artifact only once.</li>
+                    <li class="fragment">Every deployed artifact must have a version, and a tag in VCS.</li>
+                    <li class="fragment">Versioning and deploying should not change the commit history.</li>
+                    <li class="fragment">More?</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Suggestion for further work</h2>
+                <ul>
+                    <li>Rerun pipeline instances.</li>
+                    <li>Support multi branch builds.</li>
+                    <li>Use Jenkins file.</li>
+                    <li>Scale Jenkins infrastructure.</li>
+                    <li>Deploy the Spring Boot application to 'prod' (i.e. the workshop server).</li>
+                    <li>Create a docker container with the Spring Boot application.</li>
+                </ul>
+            </section>
+        </section>
+        <section id="resources">
+            <h2>Resources</h2>
+            <ul>
+                <li><a href="https://dzone.com/refcardz/continuous-delivery-with-jenkins-workflow">DZone Refcard:
+                    Continuous Delivery With Jenkins Workflow</a></li>
+                <li><a href="https://github.com/jenkinsci/pipeline-plugin/blob/master/TUTORIAL.md">Pipeline Tutorial
+                    (Jenkins)</a>
+                </li>
+                <li><a href="https://jenkins.io/doc/book/pipeline-as-code/">Pipeline as Code (Jenkins)</a></li>
+                <li><a href="https://www.cloudbees.com/blog/parallelism-and-distributed-builds-jenkins">Parallelism and
+                    Distributed Builds with Jenkins (CloudBees)</a></li>
+                <li><a href="https://github.com/jenkinsci/pipeline-plugin/blob/master/COMPATIBILITY.md">Compatible
+                    Jenkins plugins</a></li>
+                <li><a href="http://martinfowler.com/bliki/DeploymentPipeline.html">DeploymentPipeline (Martin
+                    Fowler)</a></li>
+                <!--
+                                <li><a href="http://ow.ly/UZIBE">John Willis (Docker Inc.) Presentations</a></li>
+                                <li><a href="http://vfarcic.github.io/ms-workshop/#/cover">Microservices Lifecycle Workshop by Viktor
+                                    Farcic</a></li>
+                -->
+            </ul>
+        </section>
+        <section id="thank-you" data-background-image="pipeline-pipeline-beer-400x300.jpg"
+                 data-background-repeat="repeat" data-background-size="400px 300px" data-background-position="bottom">
+            <h2>Thank You for Your Attention!</h2>
+            <hr/>
+            <h4>Michael Gfeller</h4>
+            <h4><a href="http://www.computas.com">Computas AS</a></h4>
+            <h4><a href="http://www.mgfeller.net">www.mgfeller.net</a></h4>
+        </section>
+    </div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        history: true,
+
+        // More info https://github.com/hakimel/reveal.js#dependencies
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {
+                src: 'plugin/highlight/highlight.js', async: true, callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
