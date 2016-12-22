@@ -126,7 +126,16 @@
                 </aside>
             </section>
         </section>
-        <section id="environment">
+        <section id="getstarted">
+            <section>
+                <h2>Get Started!</h2>
+                <p>These slides use <a href="http://lab.hakim.se/reveal-js/#/">reveal.js</a></p>
+                <p>Clone them from <a href="https://github.com/mgfeller/cd-jenkins-workshop-slides">https://github.com/mgfeller/cd-jenkins-workshop-slides</a>.<br/>
+                    Open index.html in a browser, and choose relevant chapter.<br/>
+                    Navigate to next slide by using the SPACE key.<br/>
+                    See overview over all slides by pressing ESC.
+                </p>
+            </section>            
             <section>
                 <h2>Workshop Environment</h2>
                 <ul>
@@ -146,19 +155,18 @@
                     </ul>
                 </aside>
             </section>
+        </section>
+        <section>
             <section>
-                <h2>Get Started!</h2>
-                <p>These slides use <a href="http://lab.hakim.se/reveal-js/#/">reveal.js</a></p>
-                <p>Clone them from <a href="https://github.com/mgfeller/cd-jenkins-workshop-slides">https://github.com/mgfeller/cd-jenkins-workshop-slides</a>.<br/>
-                    Open index.html in a browser, and choose relevant chapter.<br/>
-                    Navigate to next slide by using the SPACE key.<br/>
-                    See overview over all slides by pressing ESC.
-                </p>
-                <p>Setup the server environment: follow the instructions (do not configure Jenkins and Artifactory yet)
-                    in the <a href="https://github.com/mgfeller/cd-jenkins-workshop/blob/master/README.md">readme</a> on
+                <h1>Setup Environment</h1>
+                <p style="text-align: center">(Can be skipped if you have received a provisioned box.)</p>
+                <ul>
+                    <li>
+                Follow the instructions in the <a href="https://github.com/mgfeller/cd-jenkins-workshop/blob/master/README.md">readme</a> on
                     <a href="https://github.com/mgfeller/cd-jenkins-workshop">https://github.com/mgfeller/cd-jenkins-workshop</a>.
-                </p>
-                <p>For git configuration on Windows, see the following slides.</p>
+                    </li>
+                    <li>Make sure to follow the Windows specific Git instructions!</li>
+                    <li>Do not configure Jenkins and Artifactory yet.</li>
                 <aside class="notes">
                     <ul>
                         <li>vagrant reload --provision</li>
@@ -166,18 +174,11 @@
                     </ul>
                 </aside>
             </section>
-            <section>
-                <h2>Git on Windows: Path Configuration</h2>
-                <img src="git-windows-path-config.jpg" width="499" height="387"/>
-            </section>
-            <section>
-                <h2>Git on Windows: Line Ending Configuration</h2>
-                <img src="git-autocrlf-config.jpg" width="499" height="387"/>
-            </section>
         </section>
         <section>
             <section>
                 <h1>Setup Jenkins</h1>
+                <p style="text-align: center">(Can be skipped if you have received a provisioned box.)</p>
             </section>
             <section>
                 <h2>Unlock Jenkins</h2>
@@ -437,8 +438,15 @@ node {
                     Deployment
                 </h1>
             </section>
+        </section>
+        
+        <section>
             <section>
-                <h2>Configure Artifactory Access</h2>
+                <h1>Configure Artifactory</h1>
+                <p style="text-align: center">(Can be skipped if you have received a provisioned box.)</p>
+            </section>
+            <section>
+                <h2>New Permission 'deploy-local'</h2>
                 <ul>
                     <li>Open <a href="http://192.168.33.10:8081">http://192.168.33.10:8081</a>.<br/>
                         (Restart the vagrant box if Artifactory is not up and running.)
@@ -452,28 +460,31 @@ node {
                 </ul>
             </section>
             <section>
-                <h3>Configure Artifactory Access</h3>
+                <h2>'deploy-local' Repositories</h2>
                 <img src="artifactory-permission-deploy-1.jpg" width="1065" height="449"/>
             </section>
             <section>
-                <h3>Configure Artifactory Access</h3>
+                <h2>'deploy-local' User</h2>
                 <img src="artifactory-permission-deploy-2.jpg" width="914" height="229"/>
-            </section>
+            </section>            
+        </section>
+
+        <section>
             <section>
-                <h2>Pipeline</h2>
-                <pre>
-                    <code class="groovy">
-    // adjust this line, set  -DpipelineFailOneTest=false
-    sh "${mvnHome}/bin/mvn -B test -DpipelineFailOneTest=false"
-                    </code>
-                </pre>
-                <pre>
-                    <code class="groovy">
-   stage 'Deploy'
-   sh "${mvnHome}/bin/mvn deploy"
-                    </code>
-                </pre>
-            </section>
+            <h1>Add Deploy</h1>
+            <pre>
+                <code class="groovy">
+// adjust this line, set  -DpipelineFailOneTest=false
+sh "${mvnHome}/bin/mvn -B test -DpipelineFailOneTest=false"
+                </code>
+            </pre>
+            <pre>
+                <code class="groovy">
+stage 'Deploy'
+sh "${mvnHome}/bin/mvn deploy"
+                </code>
+            </pre>
+            </section>            
             <section>
                 <h2>Deployed!</h2>
                 <img src="artifactory-deployed.jpg" height="493" width="724"/>
@@ -482,8 +493,9 @@ node {
                         <li>But: snapshot? This is not a release, and cannot be delivered / deployed!</li>
                     </ul>
                 </aside>
-            </section>
+            </section>            
         </section>
+
         <section>
             <section>
                 <h2>Versioning</h2>
